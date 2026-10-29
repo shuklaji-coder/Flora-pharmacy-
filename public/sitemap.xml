@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://florapharmacy.in/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://florapharmacy.in/images/flora-banner.jpg</image:loc>
+      <image:title>Flora Pharmacy Store Banner - Borivali East</image:title>
+      <image:caption>Flora Pharmacy - Quality Medicines for a Healthier Tomorrow in Borivali East Mumbai</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://florapharmacy.in/images/flora-storefront.jpg</image:loc>
+      <image:title>Flora Pharmacy Storefront Signboard - Samarpan Tower</image:title>
+      <image:caption>Flora Pharmacy Physical Storefront at Samarpan, Magathane, Borivali East</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://florapharmacy.in/images/founder-premprakash-sirvi.jpg</image:loc>
+      <image:title>Premprakash Sirvi - Founder &amp; Registered Pharmacist (D.Pharm)</image:title>
+      <image:caption>Premprakash Sirvi, D.Pharm, Founder of Flora Pharmacy Borivali East</image:caption>
+    </image:image>
+  </url>
+</urlset>

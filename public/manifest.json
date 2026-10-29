@@ -1,0 +1,18 @@
+{
+  "name": "Flora Pharmacy - Borivali East Chemist",
+  "short_name": "Flora Pharmacy",
+  "description": "100% genuine medicines, healthcare devices & prompt home delivery in Borivali East & Kandivali. Open 9 AM – 11 PM.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0F7B4F",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/flora-banner.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

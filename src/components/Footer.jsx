@@ -97,6 +97,11 @@ export default function Footer() {
                 </a>
               </li>
               <li>
+                <a href="#faq" onClick={(e) => { e.preventDefault(); handleNavClick('#faq'); }} className="hover:text-emerald-400 transition">
+                  Frequently Asked Questions (FAQ)
+                </a>
+              </li>
+              <li>
                 <a href="#contact" onClick={(e) => { e.preventDefault(); handleNavClick('#contact'); }} className="hover:text-emerald-400 transition">
                   Store & Directions
                 </a>
@@ -155,6 +160,16 @@ export default function Footer() {
             </div>
           </div>
 
+        </div>
+
+        {/* Local Area Coverage for Local Search SEO */}
+        <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 text-slate-400 text-xs">
+          <span className="font-bold text-slate-300 block mb-1">
+            📍 Prompt Medicine Home Delivery Across Borivali & Kandivali:
+          </span>
+          <p className="text-[11px] leading-relaxed text-slate-400">
+            Samarpan Tower, Western Urban Road, Magathane Metro Station, Rivali Park, Nancy Colony, Carter Road, Ashokvan, Kulupwadi, Rajendra Nagar, Borivali East (400066), Kandivali East (400101), and Dahisar East.
+          </p>
         </div>
 
         {/* Legal Medical Disclaimer Box */}

@@ -1,0 +1,6 @@
+# Robots.txt for Flora Pharmacy (https://florapharmacy.in)
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://florapharmacy.in/sitemap.xml

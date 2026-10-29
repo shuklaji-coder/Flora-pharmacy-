@@ -10,6 +10,7 @@ import ServicesSection from './components/ServicesSection';
 import HowItWorks from './components/HowItWorks';
 import FounderSection from './components/FounderSection';
 import ReviewsSection from './components/ReviewsSection';
+import FAQSection from './components/FAQSection';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import FloatingActions from './components/FloatingActions';
@@ -68,7 +69,10 @@ export default function App() {
           {/* 10. Reviews Section with Borivali Localities */}
           <ReviewsSection />
 
-          {/* 11. Contact and Location with Storefront Photo & Google Maps */}
+          {/* 11. FAQ Section for Local SEO & Customer Clarity */}
+          <FAQSection />
+
+          {/* 12. Contact and Location with Storefront Photo & Google Maps */}
           <ContactSection />
         </main>
 
