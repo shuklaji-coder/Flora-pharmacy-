@@ -36,14 +36,19 @@ export default function PrescriptionSection() {
 
   // Check if browser supports Web Share API with files
   useEffect(() => {
-    if (typeof navigator !== 'undefined' && navigator.canShare) {
-      try {
-        const testFile = new File(["test"], "test.txt", { type: "text/plain" });
-        if (navigator.canShare({ files: [testFile] })) {
-          setCanNativeShare(true);
+    if (typeof navigator !== 'undefined') {
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (typeof navigator.share === 'function') {
+        try {
+          const testFile = new File(["test"], "test.png", { type: "image/png" });
+          if (navigator.canShare && navigator.canShare({ files: [testFile] })) {
+            setCanNativeShare(true);
+          } else if (isMobile) {
+            setCanNativeShare(true);
+          }
+        } catch (e) {
+          if (isMobile) setCanNativeShare(true);
         }
-      } catch (e) {
-        setCanNativeShare(false);
       }
     }
   }, []);
@@ -61,6 +66,18 @@ export default function PrescriptionSection() {
       } else {
         setFilePreview(null); // For PDF
       }
+
+      // Check if this specific file can be shared natively on mobile
+      if (typeof navigator !== 'undefined' && navigator.share) {
+        try {
+          if (navigator.canShare && navigator.canShare({ files: [selectedFile] })) {
+            setCanNativeShare(true);
+          }
+        } catch (err) {
+          // Keep current state
+        }
+      }
+
       // Auto-copy image to clipboard if possible for instant paste in WhatsApp
       copyImageToClipboard(selectedFile, false);
     }
@@ -173,19 +190,19 @@ export default function PrescriptionSection() {
 
     const message = buildOrderMessage();
 
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({
           files: [file],
           title: "Doctor Prescription - Flora Pharmacy",
           text: message
         });
-        setShowGuideModal(true);
         return;
       } catch (err) {
-        if (err.name !== 'AbortError') {
-          console.warn("Native share failed, falling back to direct WhatsApp chat:", err);
+        if (err.name === 'AbortError') {
+          return;
         }
+        console.warn("Native share failed, falling back to direct WhatsApp chat:", err);
       }
     }
 
@@ -212,6 +229,21 @@ export default function PrescriptionSection() {
 
     // Show instructional modal on screen
     setShowGuideModal(true);
+  };
+
+  // Primary Submit Handler: Uses Mobile Web Share when available, otherwise direct chat link
+  const handleSubmit = (e) => {
+    if (e) e.preventDefault();
+    if (!file) {
+      alert("Kripya pehle apne prescription ki photo ya file upload karein!");
+      return;
+    }
+
+    if (canNativeShare) {
+      handleNativeShare();
+    } else {
+      handleOpenWhatsAppChat();
+    }
   };
 
   return (
@@ -247,7 +279,7 @@ export default function PrescriptionSection() {
           className="max-w-3xl mx-auto bg-white rounded-3xl border-2 border-emerald-200/90 shadow-soft-lg overflow-hidden p-6 sm:p-8"
         >
           
-          <form onSubmit={handleOpenWhatsAppChat} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             
             {/* STEP 1: Upload Dropzone */}
             <div>
@@ -434,54 +466,72 @@ export default function PrescriptionSection() {
             {/* STEP 3: Action Buttons */}
             <div className="pt-2 space-y-3">
               
-              {/* If Mobile Web Share is available, offer direct 1-tap photo attachment */}
-              {canNativeShare && file && (
-                <button
-                  type="button"
-                  onClick={handleNativeShare}
-                  className="w-full py-3.5 px-6 rounded-2xl text-sm sm:text-base font-bold flex items-center justify-center gap-2.5 bg-gradient-to-r from-emerald-600 to-flora-700 hover:from-emerald-700 hover:to-flora-800 text-white shadow-lg shadow-emerald-700/20 transition transform hover:-translate-y-0.5"
-                >
-                  <Share2 className="w-5 h-5 shrink-0" />
-                  <span>📲 WhatsApp Par Photo Ke Saath Share Karein (Direct Attach)</span>
-                </button>
-              )}
-
-              {/* Primary / Fallback WhatsApp Button */}
+              {/* Primary Dynamic Action Button */}
               <button
                 type="submit"
                 disabled={!file}
-                className={`w-full py-3.5 px-6 rounded-2xl text-sm sm:text-base font-bold flex items-center justify-center gap-2.5 transition shadow-md ${
+                className={`w-full py-4 px-6 rounded-2xl text-sm sm:text-base font-bold flex items-center justify-center gap-2.5 transition shadow-md ${
                   file
-                    ? 'bg-wa hover:bg-wa-dark text-slate-950 hover:text-white cursor-pointer shadow-glow transform hover:-translate-y-0.5'
+                    ? canNativeShare
+                      ? 'bg-gradient-to-r from-emerald-600 via-flora-700 to-tealAccent-700 hover:from-emerald-700 hover:to-flora-800 text-white cursor-pointer shadow-glow transform hover:-translate-y-0.5'
+                      : 'bg-wa hover:bg-wa-dark text-slate-950 hover:text-white cursor-pointer shadow-glow transform hover:-translate-y-0.5'
                     : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                 }`}
               >
-                <MessageCircle className="w-5 h-5 fill-current" />
+                {canNativeShare ? (
+                  <Share2 className="w-5 h-5 shrink-0" />
+                ) : (
+                  <MessageCircle className="w-5 h-5 fill-current shrink-0" />
+                )}
                 <span>
-                  {file 
-                    ? "💬 Flora Pharmacy WhatsApp Par Send Karein (+91 86570 90405)" 
-                    : "Pehle Prescription Photo Upload Karein (Step 1)"}
+                  {!file
+                    ? "Pehle Prescription Photo Upload Karein (Step 1)"
+                    : canNativeShare
+                    ? "📲 WhatsApp Par Photo Ke Saath Bhejein (Direct Attach)"
+                    : "💬 Flora Pharmacy WhatsApp Par Send Karein (+91 86570 90405)"}
                 </span>
-                <ArrowRight className="w-4 h-4" />
+                {file && <ArrowRight className="w-4 h-4" />}
               </button>
 
+              {/* Subtext info banner explaining exactly what will happen */}
               {file && (
-                <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 text-xs flex items-start gap-2.5">
-                  <div className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                      <circle cx="12" cy="12" r="10" />
-                      <line x1="12" y1="16" x2="12" y2="12" />
-                      <line x1="12" y1="8" x2="12.01" y2="8" />
-                    </svg>
+                canNativeShare ? (
+                  <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs flex items-start gap-2.5">
+                    <span className="text-base shrink-0">✨</span>
+                    <div className="space-y-1">
+                      <p className="font-bold text-emerald-950">
+                        📱 Mobile 1-Tap Direct Attach Active:
+                      </p>
+                      <p className="text-emerald-800 text-[11px] leading-relaxed">
+                        Button dabate hi phone ka <strong>Share Menu</strong> khulega. <strong>WhatsApp</strong> select karke <strong>Flora Pharmacy (+91 86570 90405)</strong> chunein — aapki <strong>prescription photo automatically attach</strong> ho kar send ho jayegi!
+                      </p>
+                    </div>
                   </div>
-                  <div className="space-y-1">
-                    <p className="font-bold text-emerald-950">
-                      💡 WhatsApp me photo kaise send hogi:
-                    </p>
-                    <p className="text-emerald-800 leading-relaxed text-[11px]">
-                      WhatsApp open hote hi aapki saari details pre-fill ho jayengi. WhatsApp chat khulne par bas <strong>Paste (Ctrl+V)</strong> karein ya WhatsApp ke <strong>📎 (Paperclip / Camera)</strong> icon se photo send kar dein!
-                    </p>
+                ) : (
+                  <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex items-start gap-2.5">
+                    <span className="text-base shrink-0">📋</span>
+                    <div className="space-y-1">
+                      <p className="font-bold text-emerald-950">
+                        💻 Desktop Clipboard Auto-Copy:
+                      </p>
+                      <p className="text-emerald-800 text-[11px] leading-relaxed">
+                        Button click karne par photo clipboard me copy ho jayegi. WhatsApp Web khulte hi chat me bas <strong>Ctrl + V</strong> (Paste) dabayein!
+                      </p>
+                    </div>
                   </div>
+                )
+              )}
+
+              {/* Secondary Option: Direct Chat link for mobile users who want wa.me link directly */}
+              {canNativeShare && file && (
+                <div className="text-center pt-1">
+                  <button
+                    type="button"
+                    onClick={handleOpenWhatsAppChat}
+                    className="text-xs font-semibold text-slate-500 hover:text-flora-700 underline transition"
+                  >
+                    Ya seedha WhatsApp Chat Link kholna hai? Yahan click karein
+                  </button>
                 </div>
               )}
             </div>
