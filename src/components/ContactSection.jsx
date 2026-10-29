@@ -1,14 +1,21 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { BUSINESS_INFO } from '../data/business';
 import { MapPin, Phone, Clock, MessageCircle, Navigation, ExternalLink, ShieldCheck, Store, BadgeCheck } from 'lucide-react';
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="py-12 sm:py-20 bg-white/90 relative">
+    <section id="contact" className="py-12 sm:py-20 bg-white/90 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-2.5 mb-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-2xl mx-auto space-y-2.5 mb-10"
+        >
           <span className="text-xs font-bold text-flora-700 uppercase tracking-widest bg-flora-50 px-3 py-1 rounded-full border border-flora-100">
             Visit & Contact Us
           </span>
@@ -18,10 +25,16 @@ export default function ContactSection() {
           <p className="text-xs sm:text-base text-slate-600">
             Western Urban Road, Magathane Metro ke paas Samarpan Tower me humara chemist counter hai.
           </p>
-        </div>
+        </motion.div>
 
         {/* Real Store Photo Banner */}
-        <div className="mb-8 rounded-3xl overflow-hidden bg-gradient-to-r from-emerald-950 via-slate-900 to-flora-950 text-white p-4 sm:p-6 shadow-soft flex flex-col md:flex-row items-center gap-6 border border-emerald-900/50">
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-8 rounded-3xl overflow-hidden bg-gradient-to-r from-emerald-950 via-slate-900 to-flora-950 text-white p-4 sm:p-6 shadow-soft flex flex-col md:flex-row items-center gap-6 border border-emerald-900/50"
+        >
           <div className="w-full md:w-64 h-48 rounded-2xl overflow-hidden shrink-0 border-2 border-emerald-400/40 shadow-md">
             <img 
               src="/images/flora-storefront.jpg" 
@@ -41,7 +54,9 @@ export default function ContactSection() {
               Samarpan Tower, Western Urban Road par aate hi green medical crosses wala white board aapko samne dikhega. Metro se sirf 2 minute ki walking distance hai.
             </p>
             <div className="pt-1 flex flex-wrap items-center justify-center md:justify-start gap-3">
-              <a
+              <motion.a
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
                 href={BUSINESS_INFO.googleMapsDirectionsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -49,22 +64,30 @@ export default function ContactSection() {
               >
                 <Navigation className="w-3.5 h-3.5" />
                 <span>Open Google Maps Directions</span>
-              </a>
-              <a
+              </motion.a>
+              <motion.a
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
                 href={`tel:${BUSINESS_INFO.phoneRaw}`}
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition"
               >
                 <Phone className="w-3.5 h-3.5" />
                 <span>Call Store: {BUSINESS_INFO.phone}</span>
-              </a>
+              </motion.a>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Contact Details Card (5 cols on lg) */}
-          <div className="lg:col-span-5 space-y-5">
+          <motion.div
+            initial={{ opacity: 0, x: -25 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="lg:col-span-5 space-y-5"
+          >
             
             <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-soft space-y-5">
               
@@ -126,7 +149,9 @@ export default function ContactSection() {
 
               {/* Get Directions CTA Button */}
               <div className="pt-1">
-                <a
+                <motion.a
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   href={BUSINESS_INFO.googleMapsDirectionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -134,7 +159,7 @@ export default function ContactSection() {
                 >
                   <Navigation className="w-4 h-4" />
                   <span>Get Directions on Google Maps</span>
-                </a>
+                </motion.a>
               </div>
 
             </div>
@@ -147,10 +172,16 @@ export default function ContactSection() {
               </span>
             </div>
 
-          </div>
+          </motion.div>
 
           {/* Embedded Google Map (7 cols on lg) */}
-          <div className="lg:col-span-7 h-full">
+          <motion.div
+            initial={{ opacity: 0, x: 25 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="lg:col-span-7 h-full"
+          >
             <div className="rounded-3xl overflow-hidden border border-slate-200 shadow-soft h-[380px] sm:h-[450px] relative bg-slate-100">
               <iframe
                 title="Flora Pharmacy Store Location Map"
@@ -183,7 +214,7 @@ export default function ContactSection() {
                 </a>
               </div>
             </div>
-          </div>
+          </motion.div>
 
         </div>
 

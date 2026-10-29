@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { BUSINESS_INFO } from '../data/business';
 import { Search, MessageCircle, Camera, Check, Sparkles, ArrowRight, ShieldCheck, Clock } from 'lucide-react';
 
@@ -49,17 +50,29 @@ export default function QuickMedicineOrder() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Main Box */}
-        <div className="bg-gradient-to-br from-emerald-50/70 via-white to-tealAccent-50/50 rounded-3xl border-2 border-emerald-200/90 shadow-soft-lg p-6 sm:p-10 relative overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="bg-gradient-to-br from-emerald-50/70 via-white to-tealAccent-50/50 rounded-3xl border-2 border-emerald-200/90 shadow-soft-lg p-6 sm:p-10 relative overflow-hidden"
+        >
           
           {/* Ambient Glow */}
-          <div className="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 rounded-full bg-emerald-200/30 blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 rounded-full bg-emerald-200/30 blur-3xl pointer-events-none animate-pulse-glow" />
 
           <div className="max-w-3xl mx-auto text-center space-y-3 relative z-10">
             
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-flora-100 text-flora-800 text-xs font-bold uppercase tracking-wider">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1, duration: 0.4 }}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-flora-100 text-flora-800 text-xs font-bold uppercase tracking-wider"
+            >
               <Sparkles className="w-3.5 h-3.5 text-flora-700" />
               <span>Instant Medicine Order</span>
-            </div>
+            </motion.div>
 
             <h2 className="text-2xl sm:text-4xl font-extrabold font-heading text-slate-900 tracking-tight">
               Koi Bhi Dawai Chahiye? Bas Naam Likhein
@@ -71,7 +84,10 @@ export default function QuickMedicineOrder() {
 
             {/* Quick Medicine Order Input Box */}
             <form onSubmit={handleSendToWhatsApp} className="pt-4 max-w-2xl mx-auto">
-              <div className="relative flex flex-col sm:flex-row items-center gap-2 p-2 rounded-2xl bg-white border-2 border-emerald-300 shadow-md focus-within:border-flora-600 transition">
+              <motion.div 
+                whileHover={{ scale: 1.01 }}
+                className="relative flex flex-col sm:flex-row items-center gap-2 p-2 rounded-2xl bg-white border-2 border-emerald-300 shadow-md focus-within:border-flora-600 focus-within:ring-2 focus-within:ring-emerald-200 transition"
+              >
                 <div className="relative flex-1 w-full flex items-center pl-3">
                   <Search className="w-5 h-5 text-slate-400 shrink-0" />
                   <input
@@ -83,15 +99,17 @@ export default function QuickMedicineOrder() {
                   />
                 </div>
 
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.96 }}
                   type="submit"
-                  className="shimmer-button w-full sm:w-auto px-6 py-3 rounded-xl bg-wa hover:bg-wa-dark text-slate-950 hover:text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition shrink-0 active:scale-95"
+                  className="shimmer-button w-full sm:w-auto px-6 py-3 rounded-xl bg-wa hover:bg-wa-dark text-slate-950 hover:text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition shrink-0"
                 >
                   <MessageCircle className="w-4 h-4 fill-current" />
                   <span>Order on WhatsApp</span>
                   <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
             </form>
 
             {/* Popular Fast-Click Pills */}
@@ -100,12 +118,18 @@ export default function QuickMedicineOrder() {
                 Frequently Ordered:
               </span>
               <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-                {popularMedicines.map((med) => {
+                {popularMedicines.map((med, index) => {
                   const isSelected = medicineText.includes(med);
                   return (
-                    <button
+                    <motion.button
                       key={med}
                       type="button"
+                      initial={{ opacity: 0, scale: 0.85 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.03 * index, duration: 0.3 }}
+                      whileHover={{ scale: 1.08, y: -2 }}
+                      whileTap={{ scale: 0.94 }}
                       onClick={() => handleAddMedicine(med)}
                       className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition border ${
                         isSelected
@@ -114,14 +138,17 @@ export default function QuickMedicineOrder() {
                       }`}
                     >
                       <span>+ {med}</span>
-                    </button>
+                    </motion.button>
                   );
                 })}
               </div>
             </div>
 
             {/* Doctor's Prescription Callout Pill */}
-            <div className="pt-6 border-t border-emerald-200/60 mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/80 p-4 rounded-2xl border border-emerald-100">
+            <motion.div 
+              whileHover={{ y: -2 }}
+              className="pt-6 border-t border-emerald-200/60 mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/80 p-4 rounded-2xl border border-emerald-100 transition shadow-xs hover:shadow-sm"
+            >
               <div className="flex items-center gap-3 text-left">
                 <div className="w-10 h-10 rounded-xl bg-flora-100 text-flora-800 flex items-center justify-center shrink-0">
                   <Camera className="w-5 h-5 text-flora-700" />
@@ -136,15 +163,17 @@ export default function QuickMedicineOrder() {
                 </div>
               </div>
 
-              <button
+              <motion.button
                 type="button"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
                 onClick={handleScrollToPrescription}
                 className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-flora-700 hover:bg-flora-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition shrink-0"
               >
                 <span>Upload Prescription</span>
                 <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
 
             {/* 3 Quick Guarantees */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 text-[11px] text-slate-600 font-medium">
@@ -164,7 +193,7 @@ export default function QuickMedicineOrder() {
 
           </div>
 
-        </div>
+        </motion.div>
 
       </div>
     </section>

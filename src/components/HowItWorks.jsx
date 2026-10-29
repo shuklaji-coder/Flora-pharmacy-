@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Search, MessageSquare, Truck, ArrowRight } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/business';
 
@@ -24,12 +25,37 @@ export default function HowItWorks() {
     }
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.18,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 35 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
   return (
-    <section className="py-16 sm:py-20 bg-white relative">
+    <section className="py-16 sm:py-20 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-3 mb-14">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-2xl mx-auto space-y-3 mb-14"
+        >
           <span className="text-xs font-bold text-flora-700 uppercase tracking-widest bg-flora-50 px-3 py-1 rounded-full border border-flora-100">
             Simple & Transparent
           </span>
@@ -39,29 +65,41 @@ export default function HowItWorks() {
           <p className="text-sm sm:text-base text-slate-500">
             No complicated account registrations or payment gateways. Directly speak with your neighbourhood chemist.
           </p>
-        </div>
+        </motion.div>
 
         {/* 3 Step Flow */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 relative"
+        >
           
           {steps.map((item, index) => {
             const Icon = item.icon;
             return (
-              <div
+              <motion.div
                 key={index}
-                className="relative bg-surface-light rounded-3xl p-6 sm:p-8 border border-slate-100 flex flex-col justify-between hover:shadow-soft transition-all group"
+                variants={cardVariants}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="relative bg-surface-light rounded-3xl p-6 sm:p-8 border border-slate-100 flex flex-col justify-between hover:shadow-soft transition-shadow group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <div className="w-14 h-14 rounded-2xl bg-flora-700 text-white flex items-center justify-center shadow-md shadow-flora-700/20 group-hover:scale-110 transition-transform">
+                    <motion.div 
+                      whileHover={{ scale: 1.15, rotate: 5 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                      className="w-14 h-14 rounded-2xl bg-flora-700 text-white flex items-center justify-center shadow-md shadow-flora-700/20"
+                    >
                       <Icon className="w-7 h-7" />
-                    </div>
-                    <span className="font-heading font-black text-3xl text-slate-200 group-hover:text-flora-200 transition">
+                    </motion.div>
+                    <span className="font-heading font-black text-3xl text-slate-200 group-hover:text-flora-200 transition-colors">
                       {item.number}
                     </span>
                   </div>
 
-                  <h3 className="font-heading font-bold text-slate-900 text-lg mb-2 group-hover:text-flora-700 transition">
+                  <h3 className="font-heading font-bold text-slate-900 text-lg mb-2 group-hover:text-flora-700 transition-colors">
                     {item.title}
                   </h3>
 
@@ -72,13 +110,13 @@ export default function HowItWorks() {
 
                 <div className="pt-6 mt-4 border-t border-slate-200/60 flex items-center gap-1.5 text-xs font-semibold text-flora-700">
                   <span>Fast & Direct</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1.5 transition-transform" />
                 </div>
-              </div>
+              </motion.div>
             );
           })}
 
-        </div>
+        </motion.div>
 
       </div>
     </section>

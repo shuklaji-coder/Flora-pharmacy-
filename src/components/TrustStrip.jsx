@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Star, Clock, Truck, ShieldCheck } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/business';
 
@@ -30,16 +31,45 @@ export default function TrustStrip() {
     },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4, ease: 'easeOut' },
+    },
+  };
+
   return (
     <section className="relative z-10 py-6 sm:py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="bg-white rounded-3xl shadow-soft border border-slate-200/90 p-4 sm:p-6 lg:p-8">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        className="bg-white rounded-3xl shadow-soft border border-slate-200/90 p-4 sm:p-6 lg:p-8"
+      >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
           {trustItems.map((item, index) => {
             const Icon = item.icon;
             return (
-              <div
+              <motion.div
                 key={index}
-                className={`group card-hover-lift flex items-center gap-4 p-2 rounded-2xl transition duration-300 ${
+                variants={itemVariants}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                className={`group flex items-center gap-4 p-2 rounded-2xl transition duration-300 ${
                   index > 0 ? 'pt-4 sm:pt-0 sm:pl-6 lg:pl-8' : ''
                 }`}
               >
@@ -54,11 +84,11 @@ export default function TrustStrip() {
                     {item.subtitle}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

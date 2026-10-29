@@ -1,9 +1,8 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Star, CheckCircle, ExternalLink, MapPin } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/business';
 
-// NOTE FOR PHARMACY OWNER: 
-// You can easily update or add real Google reviews from your Google Business Profile here!
 export const REVIEWS = [
   {
     id: 1,
@@ -48,12 +47,37 @@ export const REVIEWS = [
 ];
 
 export default function ReviewsSection() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 25 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
+  };
+
   return (
-    <section id="reviews" className="py-12 sm:py-20 bg-surface-light relative">
+    <section id="reviews" className="py-12 sm:py-20 bg-surface-light relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Rating Summary Header */}
-        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-100 shadow-soft mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-100 shadow-soft mb-8"
+        >
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             
             <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
@@ -85,25 +109,35 @@ export default function ReviewsSection() {
             </div>
 
             {/* Direct Google Reviews Link */}
-            <a
+            <motion.a
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               href={BUSINESS_INFO.rating.googleReviewUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition shrink-0"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition shrink-0 shadow-xs"
             >
               <span>See all 34 reviews on Google</span>
               <ExternalLink className="w-4 h-4 text-slate-600" />
-            </a>
+            </motion.a>
 
           </div>
-        </div>
+        </motion.div>
 
         {/* Reviews Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6"
+        >
           {REVIEWS.map((review) => (
-            <div
+            <motion.div
               key={review.id}
-              className="card-hover-lift bg-white rounded-3xl p-5 sm:p-7 border border-slate-100 shadow-soft hover:shadow-soft-lg transition flex flex-col justify-between"
+              variants={cardVariants}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              className="bg-white rounded-3xl p-5 sm:p-7 border border-slate-100 shadow-soft hover:shadow-soft-lg transition-shadow duration-300 flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
@@ -128,7 +162,7 @@ export default function ReviewsSection() {
                     {review.name}
                   </h4>
                   <div className="flex items-center gap-1 text-[11px] text-slate-500 mt-0.5">
-                    <MapPin className="w-3 h-3 text-flora-600" />
+                    <MapPin className="w-3 3 text-flora-600" />
                     <span>{review.location}</span>
                   </div>
                 </div>
@@ -138,9 +172,9 @@ export default function ReviewsSection() {
                   <span>{review.tag}</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
       </div>
     </section>

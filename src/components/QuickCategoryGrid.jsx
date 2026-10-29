@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { BUSINESS_INFO } from '../data/business';
 import { 
   Flame, 
@@ -79,11 +80,37 @@ export default function QuickCategoryGrid() {
     window.open(url, '_blank');
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 25, scale: 0.96 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.45, ease: "easeOut" },
+    },
+  };
+
   return (
     <section className="py-8 sm:py-12 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6"
+        >
           <div>
             <span className="text-xs font-bold text-flora-700 uppercase tracking-widest bg-flora-50 px-2.5 py-1 rounded-full border border-flora-100">
               Ghar Ghar Ki Zaroorat
@@ -107,21 +134,30 @@ export default function QuickCategoryGrid() {
             <span>Ask Any Product on WhatsApp</span>
             <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1.5 transition-transform" />
           </a>
-        </div>
+        </motion.div>
 
         {/* 8 Categories Grid with Direct WhatsApp Enquiry */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
+        >
           {popularCategories.map((item, index) => {
             const Icon = item.icon;
             return (
-              <button
+              <motion.button
                 key={index}
+                variants={cardVariants}
+                whileHover={{ y: -5, scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={() => handleCategoryClick(item)}
-                className={`card-hover-lift p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br ${item.gradient} border text-left shadow-xs transition-all duration-300 group flex flex-col justify-between`}
+                className={`p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br ${item.gradient} border text-left shadow-xs transition-shadow duration-300 group flex flex-col justify-between hover:shadow-md`}
                 title={`Order ${item.label} on WhatsApp`}
               >
                 <div>
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white shadow-xs flex items-center justify-center mb-2.5 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white shadow-xs flex items-center justify-center mb-2.5 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
                     <Icon className="w-5 h-5" />
                   </div>
                   <h3 className="font-heading font-bold text-slate-900 text-xs sm:text-sm leading-snug group-hover:text-slate-950">
@@ -139,10 +175,10 @@ export default function QuickCategoryGrid() {
                   </span>
                   <ArrowRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                 </div>
-              </button>
+              </motion.button>
             );
           })}
-        </div>
+        </motion.div>
 
       </div>
     </section>

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { BUSINESS_INFO } from '../data/business';
 import { 
   Camera, 
@@ -218,7 +219,13 @@ export default function PrescriptionSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-2 mb-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-2xl mx-auto space-y-2 mb-10"
+        >
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-flora-100 text-flora-800 text-xs font-bold uppercase tracking-wider">
             <Camera className="w-3.5 h-3.5 text-flora-700" />
             <span>Prescription Upload & Delivery</span>
@@ -229,10 +236,16 @@ export default function PrescriptionSection() {
           <p className="text-xs sm:text-sm text-slate-600">
             Website par photo upload karein aur 1-click me WhatsApp par Pharmacist ko send karein.
           </p>
-        </div>
+        </motion.div>
 
         {/* Upload Container Box */}
-        <div className="max-w-3xl mx-auto bg-white rounded-3xl border-2 border-emerald-200/90 shadow-soft-lg overflow-hidden p-6 sm:p-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="max-w-3xl mx-auto bg-white rounded-3xl border-2 border-emerald-200/90 shadow-soft-lg overflow-hidden p-6 sm:p-8"
+        >
           
           <form onSubmit={handleOpenWhatsAppChat} className="space-y-6">
             
@@ -483,14 +496,26 @@ export default function PrescriptionSection() {
 
           </form>
 
-        </div>
+        </motion.div>
 
       </div>
 
       {/* GUIDANCE MODAL: Explains how to complete the prescription send in WhatsApp */}
-      {showGuideModal && file && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border-2 border-emerald-200 space-y-5">
+      <AnimatePresence>
+        {showGuideModal && file && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border-2 border-emerald-200 space-y-5"
+            >
             
             {/* Modal Header */}
             <div className="flex items-start justify-between">
@@ -610,9 +635,10 @@ export default function PrescriptionSection() {
               </button>
             </div>
 
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+    </AnimatePresence>
 
     </section>
   );

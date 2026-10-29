@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { BUSINESS_INFO } from '../data/business';
 import { MessageCircle, Phone, Navigation, ShieldCheck } from 'lucide-react';
 
@@ -8,23 +9,33 @@ export default function Hero() {
   )}`;
 
   return (
-    <section id="home" className="relative w-full bg-white animate-fade-in">
+    <section id="home" className="relative w-full bg-white">
       
       {/* 
         OFFICIAL FLORA PHARMACY BANNER
         100% visible, unblurred, no cropping, clean white background
       */}
-      <div className="w-full relative overflow-hidden bg-white flex items-center justify-center group">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.985 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="w-full relative overflow-hidden bg-white flex items-center justify-center group"
+      >
         <img
           src="/images/flora-banner.jpg"
           alt="Flora Pharmacy - Quality Medicines for a Healthier Tomorrow - फ्लोर फार्मेसी"
           className="w-full h-auto max-h-[85vh] object-contain block mx-auto shadow-xs transition-transform duration-700 group-hover:scale-[1.008]"
           loading="eager"
         />
-      </div>
+      </motion.div>
 
       {/* Sleek Action Bar Directly Below Banner */}
-      <div className="bg-slate-900 text-white py-4 px-4 sm:px-6 border-t border-slate-800 shadow-md">
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="bg-slate-900 text-white py-4 px-4 sm:px-6 border-t border-slate-800 shadow-md"
+      >
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           
           {/* Store status & timings with animated pulse beacon */}
@@ -41,37 +52,43 @@ export default function Hero() {
 
           {/* Quick Action CTAs */}
           <div className="flex flex-wrap items-center justify-center md:justify-end gap-3">
-            <a
+            <motion.a
+              whileHover={{ scale: 1.05, y: -1 }}
+              whileTap={{ scale: 0.95 }}
               href={`tel:${BUSINESS_INFO.phoneRaw}`}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold transition border border-white/15 shadow-xs hover:-translate-y-0.5"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold transition border border-white/15 shadow-xs"
             >
               <Phone className="w-3.5 h-3.5 text-emerald-400" />
               <span>Call Store</span>
-            </a>
+            </motion.a>
 
-            <a
+            <motion.a
+              whileHover={{ scale: 1.05, y: -1 }}
+              whileTap={{ scale: 0.95 }}
               href={BUSINESS_INFO.googleMapsDirectionsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold transition border border-white/15 shadow-xs hover:-translate-y-0.5"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold transition border border-white/15 shadow-xs"
             >
               <Navigation className="w-3.5 h-3.5 text-emerald-400" />
               <span>Directions</span>
-            </a>
+            </motion.a>
 
-            <a
+            <motion.a
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               href={defaultWhatsAppOrder}
               target="_blank"
               rel="noopener noreferrer"
-              className="shimmer-button inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-wa hover:bg-wa-dark text-slate-950 hover:text-white text-xs sm:text-sm font-bold transition shadow-md hover:scale-105 active:scale-95"
+              className="shimmer-button inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-wa hover:bg-wa-dark text-slate-950 hover:text-white text-xs sm:text-sm font-bold transition shadow-md"
             >
               <MessageCircle className="w-4 h-4 fill-current" />
               <span>Order on WhatsApp</span>
-            </a>
+            </motion.a>
           </div>
 
         </div>
-      </div>
+      </motion.div>
 
     </section>
   );
