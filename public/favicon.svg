@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+  <defs>
+    <linearGradient id="floraGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#16A34A" />
+      <stop offset="60%" stop-color="#0F7B4F" />
+      <stop offset="100%" stop-color="#06432B" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <!-- Rounded Brand Square Badge -->
+  <rect width="96" height="96" rx="22" fill="url(#floraGrad)" />
+  <rect x="1" y="1" width="94" height="94" rx="21" fill="none" stroke="white" stroke-opacity="0.15" stroke-width="2" />
+  <!-- Medical Cross in Pure White -->
+  <path d="M37 17 H59 V37 H79 V59 H59 V79 H37 V59 H17 V37 H37 Z" fill="#FFFFFF" filter="url(#shadow)" />
+  <!-- Center Emerald Healing Core -->
+  <circle cx="48" cy="48" r="7.5" fill="#10B981" />
+</svg>

@@ -3,9 +3,14 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://florapharmacy.in/</loc>
-    <lastmod>2026-10-29</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://florapharmacy.in/favicon-512x512.png</image:loc>
+      <image:title>Flora Pharmacy Official Logo Badge</image:title>
+      <image:caption>Flora Pharmacy Official Logo - Borivali East Chemist</image:caption>
+    </image:image>
     <image:image>
       <image:loc>https://florapharmacy.in/images/flora-banner.jpg</image:loc>
       <image:title>Flora Pharmacy Store Banner - Borivali East</image:title>
