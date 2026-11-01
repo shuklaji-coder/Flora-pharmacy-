@@ -21,7 +21,7 @@ export default function ServicesSection() {
     },
     {
       icon: RefreshCw,
-      title: "Monthly Prescription Refills",
+      title: "Monthly Medicine Refills",
       description: "Hassle-free recurring monthly orders for chronic care medicines (BP, Diabetes, Thyroid, Cardiac).",
       features: ["Scheduled reminders", "Never run out of pills", "Priority doorstep delivery"],
       color: "text-tealAccent-600 bg-tealAccent-50 border-tealAccent-100"

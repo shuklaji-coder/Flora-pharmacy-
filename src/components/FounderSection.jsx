@@ -16,7 +16,7 @@ import {
 
 export default function FounderSection() {
   const consultWhatsApp = `https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(
-    "Hello Premprakash Sirvi ji (Flora Pharmacy), I would like to consult regarding my medicines / prescription."
+    "Hello Premprakash Sirvi ji (Flora Pharmacy), I would like to consult regarding medicines and health guidance."
   )}`;
 
   const pillars = [

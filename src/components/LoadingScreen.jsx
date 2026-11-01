@@ -15,15 +15,24 @@ export default function LoadingScreen({ onFinish }) {
   ];
 
   useEffect(() => {
-    // Progress counter animation from 0 to 100
-    const duration = 1800; // 1.8 seconds total
-    const intervalTime = 30;
+    try {
+      const alreadyLoaded = sessionStorage.getItem('flora_app_loaded');
+      if (alreadyLoaded === 'true') {
+        setIsVisible(false);
+        if (onFinish) onFinish();
+        return;
+      }
+      sessionStorage.setItem('flora_app_loaded', 'true');
+    } catch (e) {}
+
+    // Snappy, sleek 900ms branded entrance
+    const duration = 900;
+    const intervalTime = 25;
     const totalSteps = duration / intervalTime;
     let currentStep = 0;
 
     const timer = setInterval(() => {
       currentStep++;
-      // Easing calculation for smooth acceleration & gentle finish
       const rawProgress = Math.min(100, Math.round((currentStep / totalSteps) * 100));
       setProgress(rawProgress);
 
@@ -40,14 +49,14 @@ export default function LoadingScreen({ onFinish }) {
 
       if (currentStep >= totalSteps) {
         clearInterval(timer);
-        // Start exit animation
+        // Start smooth exit transition
         setTimeout(() => {
           setIsExiting(true);
           setTimeout(() => {
             setIsVisible(false);
             if (onFinish) onFinish();
-          }, 650); // Matches CSS transition duration
-        }, 200);
+          }, 350);
+        }, 120);
       }
     }, intervalTime);
 

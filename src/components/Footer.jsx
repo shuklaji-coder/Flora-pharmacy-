@@ -1,10 +1,12 @@
 import React from 'react';
 import Logo from './Logo';
+import { useStore } from '../context/StoreContext';
 import { BUSINESS_INFO } from '../data/business';
 import { Phone, MessageCircle, MapPin, Clock, ShieldAlert, Heart } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const { setSelectedCategory } = useStore();
 
   const handleNavClick = (href) => {
     const element = document.querySelector(href);
@@ -14,14 +16,14 @@ export default function Footer() {
   };
 
   const medicineSpecialities = [
-    "Prescription Medicines (Rx)",
-    "Fever, Cold & Cough",
-    "Diabetes & BP Chronic Care",
-    "Vitamins & Supplements",
-    "Pain Relief Ointments & Sprays",
-    "Digital BP & Sugar Monitors",
-    "Baby Care & Nutrition",
-    "First Aid & Antiseptics"
+    { label: "Fever, Cold & Cough", cat: "OTC & Fever/Cold" },
+    { label: "Diabetes & BP Chronic Care", cat: "Diabetic Care" },
+    { label: "Vitamins & Health Supplements", cat: "Vitamins & Supplements" },
+    { label: "Pain Relief Ointments & Sprays", cat: "Pain Relief & Balms" },
+    { label: "Digital BP & Sugar Monitors", cat: "Health Devices" },
+    { label: "Baby Care & Diapers", cat: "Baby Care" },
+    { label: "Acidity & Digestion", cat: "Digestion & Acidity" },
+    { label: "First Aid & Antiseptics", cat: "First Aid & Antiseptic" }
   ];
 
   return (
@@ -35,7 +37,7 @@ export default function Footer() {
           <div className="lg:col-span-4 space-y-4">
             <Logo textClassName="text-xl text-white" />
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm mt-3">
-              Flora Pharmacy is your trusted neighborhood healthcare store in Borivali East, Mumbai. Providing authentic medicines, clinical supplies, and prompt home delivery.
+              Flora Pharmacy is your trusted neighborhood healthcare store in Borivali East, Mumbai. Providing authentic medicines, clinical supplies, and prompt 30-min home delivery.
             </p>
 
             <div className="pt-2 flex items-center gap-3">
@@ -72,23 +74,18 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#order-medicines" onClick={(e) => { e.preventDefault(); handleNavClick('#order-medicines'); }} className="hover:text-emerald-400 transition">
-                  Order Medicines
-                </a>
-              </li>
-              <li>
-                <a href="#prescription" onClick={(e) => { e.preventDefault(); handleNavClick('#prescription'); }} className="hover:text-emerald-400 transition">
-                  Upload Prescription
+                <a href="#products-section" onClick={(e) => { e.preventDefault(); handleNavClick('#products-section'); }} className="hover:text-emerald-400 transition">
+                  Buy Medicines Online
                 </a>
               </li>
               <li>
                 <a href="#services" onClick={(e) => { e.preventDefault(); handleNavClick('#services'); }} className="hover:text-emerald-400 transition">
-                  Services
+                  Pharmacy Services
                 </a>
               </li>
               <li>
                 <a href="#founder" onClick={(e) => { e.preventDefault(); handleNavClick('#founder'); }} className="hover:text-emerald-400 transition">
-                  Our Founder
+                  Our Pharmacist
                 </a>
               </li>
               <li>
@@ -98,7 +95,7 @@ export default function Footer() {
               </li>
               <li>
                 <a href="#faq" onClick={(e) => { e.preventDefault(); handleNavClick('#faq'); }} className="hover:text-emerald-400 transition">
-                  Frequently Asked Questions (FAQ)
+                  FAQ & Delivery
                 </a>
               </li>
               <li>
@@ -112,21 +109,20 @@ export default function Footer() {
           {/* Medicines & Healthcare Categories (3 cols) */}
           <div className="lg:col-span-3 space-y-3">
             <h4 className="font-heading font-bold text-white text-sm uppercase tracking-wider">
-              Available Categories
+              Popular Categories
             </h4>
             <ul className="grid grid-cols-1 gap-2 text-xs text-slate-400">
               {medicineSpecialities.map((item) => (
-                <li key={item}>
-                  <a
-                    href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(
-                      `Hello Flora Pharmacy, I want to enquire about ${item}.`
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-emerald-400 transition"
+                <li key={item.label}>
+                  <button
+                    onClick={() => {
+                      setSelectedCategory(item.cat);
+                      handleNavClick('#products-section');
+                    }}
+                    className="hover:text-emerald-400 transition text-left"
                   >
-                    {item}
-                  </a>
+                    {item.label}
+                  </button>
                 </li>
               ))}
             </ul>
@@ -179,7 +175,7 @@ export default function Footer() {
             <span>Important Medical Disclaimer</span>
           </div>
           <p>
-            Information on this website is for general informational purposes only and is not intended to replace professional medical advice, diagnosis, or treatment. Always consult a licensed physician or healthcare specialist before starting any medication or treatment. Prescription medications are dispensed strictly against a valid prescription issued by a registered medical practitioner.
+            Information on this website is for general informational purposes only and is not intended to replace professional medical advice, diagnosis, or treatment. Always consult a licensed physician or healthcare specialist before starting any medication or treatment.
           </p>
         </div>
 

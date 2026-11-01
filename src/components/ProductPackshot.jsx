@@ -5,8 +5,23 @@ import React, { useState } from 'react';
  * Renders authentic Indian pharmacy packaging visuals with real brand styling,
  * 3D gradients, iconic colors, and form factors.
  */
-export default function ProductPackshot({ product }) {
+function ProductPackshotComponent({ product }) {
   const [imgError, setImgError] = useState(false);
+
+  // 0. If a custom or admin image URL exists and has not errored, render the real photo!
+  if (product.image && !imgError) {
+    return (
+      <div className="w-full h-full bg-white flex items-center justify-center p-2 relative overflow-hidden select-none">
+        <img
+          src={product.image}
+          alt={product.name}
+          onError={() => setImgError(true)}
+          className="max-h-full max-w-full object-contain filter drop-shadow-2xs transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+        />
+      </div>
+    );
+  }
 
   // If a real image exists and has not errored, we can show it with packshot styling
   // But for the iconic products, render the authentic realistic Indian packshot illustration!
@@ -564,3 +579,6 @@ export default function ProductPackshot({ product }) {
     </div>
   );
 }
+
+const ProductPackshot = React.memo(ProductPackshotComponent);
+export default ProductPackshot;

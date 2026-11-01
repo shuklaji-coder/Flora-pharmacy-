@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="100%" height="100%">
+  <rect width="240" height="80" rx="12" fill="#FFFFFF"/>
+  <g transform="translate(20, 14)">
+    <!-- Pampers Turquoise Heart Badge with Yellow Sun -->
+    <g transform="translate(10, 4)">
+      <!-- Golden yellow sunburst -->
+      <circle cx="18" cy="18" r="16" fill="#FACC15"/>
+      <!-- Teal Heart -->
+      <path d="M 18 10 C 13 4 5 7 5 15 C 5 23 18 31 18 31 C 18 31 31 23 31 15 C 31 7 23 4 18 10 Z" fill="#0D9488"/>
+    </g>
+    <!-- Pampers text -->
+    <text x="54" y="32" font-family="'Arial Rounded MT Bold', 'Arial Black', sans-serif" font-weight="900" font-size="28" fill="#0D9488" letter-spacing="-0.5">pampers</text>
+    <text x="56" y="44" font-family="'Inter', Arial, sans-serif" font-size="8" font-weight="800" fill="#F59E0B" letter-spacing="1">LOVE, SLEEP &amp; PLAY</text>
+  </g>
+</svg>

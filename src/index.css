@@ -8,7 +8,8 @@
     color: #1e293b;
     background-color: #f8faf8;
     -webkit-tap-highlight-color: transparent;
-    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -104,11 +105,13 @@
 
 /* Card hover lift utility */
 .card-hover-lift {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  transform: translateZ(0);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .card-hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 30px -4px rgba(15, 123, 79, 0.14), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+  transform: translate3d(0, -4px, 0);
+  box-shadow: 0 14px 28px -4px rgba(15, 123, 79, 0.14), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
 }
 
 /* Smooth ambient particle float */
@@ -135,4 +138,76 @@
 }
 .animate-particle-3 {
   animation: particle-drift 7s ease-in-out infinite 2s;
+}
+
+
+/* Continuous Smooth Infinite Marquee Slider (Non-Stop Glide with Hardware GPU Compositing) */
+@keyframes continuous-marquee-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes continuous-marquee-right {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-marquee-continuous,
+.animate-marquee-continuous-devices,
+.animate-marquee-continuous-flash,
+.animate-marquee-continuous-right,
+.animate-marquee-continuous-catalog,
+.animate-marquee-continuous-catalog-fast {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+  contain: layout paint;
+}
+
+.animate-marquee-continuous {
+  animation: continuous-marquee-left 46s linear infinite;
+}
+
+.animate-marquee-continuous-devices {
+  animation: continuous-marquee-left 52s linear infinite;
+}
+
+.animate-marquee-continuous-flash {
+  animation: continuous-marquee-left 40s linear infinite;
+}
+
+.animate-marquee-continuous-right {
+  animation: continuous-marquee-right 48s linear infinite;
+}
+
+.animate-marquee-continuous-catalog {
+  animation: continuous-marquee-left 50s linear infinite;
+}
+
+.animate-marquee-continuous-catalog-fast {
+  animation: continuous-marquee-left 34s linear infinite;
+}
+
+/* Universal pause on hover for all marquee variations */
+.marquee-pause-on-hover:hover .animate-marquee-continuous,
+.marquee-pause-on-hover:hover .animate-marquee-continuous-devices,
+.marquee-pause-on-hover:hover .animate-marquee-continuous-flash,
+.marquee-pause-on-hover:hover .animate-marquee-continuous-right,
+.marquee-pause-on-hover:hover .animate-marquee-continuous-catalog,
+.marquee-pause-on-hover:hover .animate-marquee-continuous-catalog-fast,
+.marquee-pause-on-hover:hover [class*="animate-marquee-continuous"] {
+  animation-play-state: paused !important;
 }

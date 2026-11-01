@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="100%" height="100%">
+  <rect width="240" height="80" rx="12" fill="#FFFFFF"/>
+  <g transform="translate(18, 12)">
+    <!-- Blue & Green Cetaphil Pill / Oval -->
+    <ellipse cx="102" cy="24" rx="84" ry="24" fill="#0284C7"/>
+    <ellipse cx="100" cy="22" rx="80" ry="22" fill="#0369A1"/>
+    <path d="M 35 22 Q 100 2 165 22 Q 100 8 35 22 Z" fill="#84CC16" opacity="0.9"/>
+    <!-- Cetaphil White Brand Text -->
+    <text x="100" y="31" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="25" fill="#FFFFFF" text-anchor="middle" letter-spacing="-0.5">Cetaphil</text>
+    <!-- Subtitle -->
+    <text x="102" y="52" font-family="'Inter', Arial, sans-serif" font-size="8" font-weight="800" fill="#0369A1" text-anchor="middle" letter-spacing="1.2">DERMATOLOGIST RECOMMENDED</text>
+  </g>
+</svg>

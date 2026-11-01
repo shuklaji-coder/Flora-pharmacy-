@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="100%" height="100%">
+  <rect width="240" height="80" rx="12" fill="#FFFFFF"/>
+  <g transform="translate(20, 16)">
+    <!-- Volini Speed Flame / Pain Relief Burst -->
+    <g transform="translate(5, 6)">
+      <path d="M 12 2 Q 22 14 16 28 Q 12 20 8 16 Z" fill="#EA580C"/>
+      <path d="M 12 10 Q 18 16 15 24 Z" fill="#FACC15"/>
+    </g>
+    <!-- VOLINI Italic Bold text -->
+    <text x="36" y="32" font-family="'Arial Black', Arial, sans-serif" font-weight="900" font-style="italic" font-size="28" fill="#C2410C" letter-spacing="-0.5">VOLINI</text>
+    <text x="38" y="44" font-family="'Inter', Arial, sans-serif" font-size="8" font-weight="900" fill="#EA580C" letter-spacing="1">INSTANT PAIN RELIEF</text>
+  </g>
+</svg>

@@ -10,20 +10,20 @@ export default function FAQSection() {
     {
       q: "Kya Flora Pharmacy Borivali East me medicine home delivery provide karta hai?",
       qEn: "Does Flora Pharmacy provide home delivery in Borivali East?",
-      a: "Haan! Flora Pharmacy Samarpan, Magathane Metro, Rivali Park, Nancy Colony, Carter Road, Ashokvan, Kulupwadi aur aas-paas ke sabhi Borivali East & Kandivali areas me fast doorstep delivery provide karta hai. Aap bas WhatsApp par dawai ka naam ya prescription photo bhej kar turant delivery manga sakte hain.",
+      a: "Haan! Flora Pharmacy Samarpan, Magathane Metro, Rivali Park, Nancy Colony, Carter Road, Ashokvan, Kulupwadi aur aas-paas ke sabhi Borivali East & Kandivali areas me fast 30-min doorstep delivery provide karta hai. Aap website par direct cart order place kar sakte hain ya WhatsApp par dawai ka naam bhej kar manga sakte hain.",
       tag: "Home Delivery"
     },
     {
       q: "Flora Pharmacy ke store timings aur working hours kya hain?",
       qEn: "What are the pharmacy opening hours?",
-      a: "Hum saaton din (Monday to Sunday) subah 9:00 AM se raat 11:00 PM tak khule rehte hain. Sundays aur public holidays par bhi counter open rehta hai taaki night emergencies me aapko dawai ke liye pareshan na hona pade.",
+      a: "Hum saaton din (Monday to Sunday) subah 9:00 AM se raat 11:00 PM tak khule rehte hain. Sundays aur public holidays par bhi counter open rehta hai taaki emergencies me aapko dawai ke liye pareshan na hona pade.",
       tag: "Store Timings"
     },
     {
-      q: "Doctor ki parchi (Prescription) se dawai kaise order karein?",
-      qEn: "How to order medicines using a doctor's prescription?",
-      a: "Website ke 'Upload Prescription' section me jakar apne mobile camera se prescription ki photo upload karein aur 1-tap me WhatsApp par send kar dein. Humare Registered Pharmacist (Premprakash Sirvi, D.Pharm) prescription verify karke total bill aur delivery time confirm kar denge.",
-      tag: "Prescription Order"
+      q: "Website se dawai order kaise karein?",
+      qEn: "How to order medicines online from Flora Pharmacy?",
+      a: "Website par kisi bhi dawai (jaise Dolo 650, BP Monitor, Baby Diapers) ko search karein ya category choose karein, 'ADD' button dabakar quantity set karein, aur Cart drawer me jaakar 'Proceed to Checkout' click karein. Apna address aur delivery slot chunein, aur Cash on Delivery ya UPI se 30-min delivery confirm karein!",
+      tag: "Online Order"
     },
     {
       q: "Kya Flora Pharmacy par 100% genuine aur fresh expiry medicines milti hain?",

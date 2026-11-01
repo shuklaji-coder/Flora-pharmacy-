@@ -17,6 +17,8 @@ export const BUSINESS_INFO = {
     days: "Monday – Sunday (All 7 Days)",
     time: "9:00 AM – 11:00 PM"
   },
+  upiId: "8879127052@ptypes",
+  upiPayeeName: "Flora Pharmacy",
   rating: {
     score: 4.8,
     totalReviews: 34,

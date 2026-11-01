@@ -1,190 +1,264 @@
 import React from 'react';
-import { getMultiItemWhatsAppUrl, BUSINESS_INFO } from '../data/business';
+import { useStore } from '../context/StoreContext';
 import { 
   X, 
   Trash2, 
   Plus, 
   Minus, 
-  MessageCircle, 
   ShoppingBag, 
-  ArrowRight,
-  ShieldCheck,
-  Package
+  ArrowRight, 
+  ShieldCheck, 
+  Truck, 
+  Percent,
+  CheckCircle2
 } from 'lucide-react';
+import ProductPackshot from './ProductPackshot';
 
-export default function CartDrawer({
-  isOpen,
-  onClose,
-  items,
-  onUpdateQuantity,
-  onRemoveItem,
-  onClearList
-}) {
-  if (!isOpen) return null;
+export default function CartDrawer() {
+  const { 
+    isCartOpen, 
+    setIsCartOpen, 
+    cart, 
+    cartCount, 
+    cartSubtotal, 
+    cartMrpTotal, 
+    cartDiscount, 
+    deliveryFee, 
+    cartGrandTotal, 
+    freeDeliveryThreshold,
+    updateCartQuantity, 
+    removeFromCart, 
+    clearCart,
+    setIsCheckoutOpen
+  } = useStore();
 
-  const totalCount = items.reduce((acc, curr) => acc + (curr.quantity || 1), 0);
-  const whatsappUrl = getMultiItemWhatsAppUrl(items);
+  if (!isCartOpen) return null;
+
+  const amountNeededForFreeDelivery = Math.max(0, freeDeliveryThreshold - cartSubtotal);
+  const deliveryProgress = Math.min(100, (cartSubtotal / freeDeliveryThreshold) * 100);
+
+  const handleProceedToCheckout = () => {
+    setIsCartOpen(false);
+    setIsCheckoutOpen(true);
+  };
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
-        onClick={onClose}
+        className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity animate-fade-in"
+        onClick={() => setIsCartOpen(false)}
         aria-hidden="true"
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col">
+        <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col h-full animate-fade-in-up">
           
           {/* Drawer Header */}
-          <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+          <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-flora-100 text-flora-800 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-2xl bg-flora-100 text-flora-800 flex items-center justify-center">
                 <ShoppingBag className="w-5 h-5 text-flora-700" />
               </div>
               <div>
-                <h3 className="font-heading font-bold text-slate-900 text-base">
-                  My Medicine Enquiry List
+                <h3 className="font-heading font-black text-slate-900 text-base">
+                  Your Pharmacy Cart
                 </h3>
-                <p className="text-xs text-slate-500">
-                  {totalCount} {totalCount === 1 ? 'item' : 'items'} selected
+                <p className="text-xs text-slate-500 font-medium">
+                  {cartCount} {cartCount === 1 ? 'item' : 'items'} • Borivali East Store
                 </p>
               </div>
             </div>
 
             <button
-              onClick={onClose}
-              className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
-              aria-label="Close List"
+              onClick={() => setIsCartOpen(false)}
+              className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition"
+              aria-label="Close Cart"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Drawer Body */}
+          {/* Free Express Delivery Progress Bar */}
+          {cartCount > 0 && (
+            <div className="bg-emerald-50/80 p-3.5 border-b border-emerald-100 space-y-1.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-emerald-950 flex items-center gap-1.5">
+                  <Truck className="w-4 h-4 text-emerald-700" />
+                  {amountNeededForFreeDelivery === 0 ? (
+                    <span className="text-emerald-700">🎉 FREE 30-Min Delivery Unlocked!</span>
+                  ) : (
+                    <span>Add ₹{amountNeededForFreeDelivery} more for FREE Delivery</span>
+                  )}
+                </span>
+                <span className="text-[11px] font-extrabold text-emerald-800">
+                  {Math.round(deliveryProgress)}%
+                </span>
+              </div>
+              <div className="w-full h-1.5 rounded-full bg-emerald-200 overflow-hidden">
+                <div 
+                  className="h-full bg-flora-600 transition-all duration-300 rounded-full"
+                  style={{ width: `${deliveryProgress}%` }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Drawer Body / Cart Items */}
           <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
-            {items.length === 0 ? (
+            {cart.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-4">
-                <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
-                  <Package className="w-8 h-8" />
+                <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+                  <ShoppingBag className="w-10 h-10" />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="font-heading font-bold text-slate-800 text-base">
-                    Your List is Empty
+                  <h4 className="font-heading font-bold text-slate-900 text-lg">
+                    Your Cart is Empty
                   </h4>
-                  <p className="text-xs text-slate-500 max-w-xs">
-                    Browse the product showcase and tap "Add to My List" on items you wish to order or enquire about.
+                  <p className="text-xs text-slate-500 max-w-xs leading-relaxed">
+                    Browse our online pharmacy catalog to add medicines, baby care, or health monitors.
                   </p>
                 </div>
                 <button
-                  onClick={onClose}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-flora-700 text-white hover:bg-flora-800 transition"
+                  onClick={() => setIsCartOpen(false)}
+                  className="px-5 py-2.5 rounded-xl text-xs font-bold bg-flora-700 text-white hover:bg-flora-800 transition shadow-xs"
                 >
-                  Browse Products
+                  Explore Medicines
                 </button>
               </div>
             ) : (
               <>
                 <div className="flex items-center justify-between text-xs text-slate-500 pb-1">
-                  <span>Selected Products</span>
+                  <span>Selected Medicines ({cartCount})</span>
                   <button
-                    onClick={onClearList}
-                    className="text-red-500 hover:text-red-700 flex items-center gap-1 font-medium transition"
+                    onClick={clearCart}
+                    className="text-red-500 hover:text-red-700 flex items-center gap-1 font-semibold transition"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
-                    <span>Clear All</span>
+                    <span>Clear Cart</span>
                   </button>
                 </div>
 
                 <div className="space-y-3">
-                  {items.map((item) => (
+                  {cart.map((item) => (
                     <div
                       key={item.id}
-                      className="p-3 rounded-2xl border border-slate-100 bg-surface-light flex items-center justify-between gap-3 shadow-xs"
+                      className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center gap-3 transition hover:border-emerald-200"
                     >
-                      {/* Thumbnail */}
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-14 h-14 rounded-xl object-cover shrink-0 bg-slate-200"
-                      />
+                      {/* Product Thumbnail */}
+                      <div className="w-14 h-14 rounded-xl bg-white border border-slate-200 shrink-0 flex items-center justify-center p-1 overflow-hidden">
+                        <ProductPackshot product={item} />
+                      </div>
 
-                      {/* Info */}
+                      {/* Product Details */}
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-heading font-bold text-slate-900 text-xs sm:text-sm truncate">
+                        <h5 className="font-heading font-bold text-xs text-slate-900 truncate">
                           {item.name}
-                        </h4>
-                        <p className="text-[11px] text-slate-500 truncate">
-                          {item.category} • {item.form || 'Unit'}
+                        </h5>
+                        <p className="text-[11px] text-slate-500 font-medium">
+                          {item.form || "Pack"}
                         </p>
-                        
-                        {/* Quantity Counter */}
-                        <div className="flex items-center gap-2 mt-2">
-                          <div className="inline-flex items-center border border-slate-200 rounded-lg bg-white">
-                            <button
-                              onClick={() => onUpdateQuantity(item.id, (item.quantity || 1) - 1)}
-                              className="p-1 text-slate-500 hover:text-slate-800 hover:bg-slate-50 rounded-l-lg transition"
-                              aria-label="Decrease quantity"
-                            >
-                              <Minus className="w-3 h-3" />
-                            </button>
-                            <span className="px-2.5 text-xs font-bold text-slate-800 min-w-[1.75rem] text-center">
-                              {item.quantity || 1}
+                        <div className="flex items-baseline gap-1.5 mt-0.5">
+                          <span className="text-xs font-black text-flora-800">
+                            ₹{item.price * item.quantity}
+                          </span>
+                          {item.mrp > item.price && (
+                            <span className="text-[10px] text-slate-400 line-through">
+                              ₹{item.mrp * item.quantity}
                             </span>
-                            <button
-                              onClick={() => onUpdateQuantity(item.id, (item.quantity || 1) + 1)}
-                              className="p-1 text-slate-500 hover:text-slate-800 hover:bg-slate-50 rounded-r-lg transition"
-                              aria-label="Increase quantity"
-                            >
-                              <Plus className="w-3 h-3" />
-                            </button>
-                          </div>
+                          )}
                         </div>
+                      </div>
+
+                      {/* Quantity Controls */}
+                      <div className="flex items-center bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden shrink-0">
+                        <button
+                          onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
+                          className="w-7 h-7 flex items-center justify-center text-slate-600 hover:bg-slate-100 transition"
+                          aria-label="Decrease quantity"
+                        >
+                          <Minus className="w-3 h-3" />
+                        </button>
+                        <span className="w-6 text-center font-bold text-xs text-slate-900">
+                          {item.quantity}
+                        </span>
+                        <button
+                          onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
+                          className="w-7 h-7 flex items-center justify-center text-slate-600 hover:bg-slate-100 transition"
+                          aria-label="Increase quantity"
+                        >
+                          <Plus className="w-3 h-3" />
+                        </button>
                       </div>
 
                       {/* Remove Button */}
                       <button
-                        onClick={() => onRemoveItem(item.id)}
-                        className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition"
-                        title="Remove"
+                        onClick={() => removeFromCart(item.id)}
+                        className="text-slate-400 hover:text-red-500 p-1 rounded-lg transition shrink-0"
+                        title="Remove Item"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <X className="w-4 h-4" />
                       </button>
                     </div>
                   ))}
+                </div>
+
+                {/* 100% Genuine Tag inside Cart */}
+                <div className="p-3 rounded-2xl bg-emerald-50/60 border border-emerald-100 flex items-center gap-2 text-[11px] text-emerald-900">
+                  <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
+                  <span>
+                    100% genuine medicines sourced directly from licensed pharma distributors.
+                  </span>
                 </div>
               </>
             )}
           </div>
 
-          {/* Drawer Footer / Checkout CTA */}
-          {items.length > 0 && (
-            <div className="p-4 sm:p-5 border-t border-slate-100 bg-white space-y-3">
-              <div className="p-3 rounded-xl bg-emerald-50/70 border border-emerald-100 text-[11px] text-slate-600 space-y-1">
-                <div className="flex items-center gap-1.5 font-bold text-flora-800">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>How Multi-Item Enquiry Works</span>
+          {/* Drawer Footer & Bill Breakdown */}
+          {cart.length > 0 && (
+            <div className="p-4 sm:p-5 border-t border-slate-200 bg-white space-y-3.5 shadow-lg">
+              
+              {/* Price Breakdown */}
+              <div className="space-y-1.5 text-xs text-slate-600">
+                <div className="flex justify-between">
+                  <span>Item Total (MRP)</span>
+                  <span className="font-semibold text-slate-800">₹{cartMrpTotal}</span>
                 </div>
-                <p>
-                  Clicking below opens WhatsApp with all {totalCount} items pre-listed. Our pharmacist will confirm stock, provide final billing, and arrange doorstep delivery.
-                </p>
+
+                {cartDiscount > 0 && (
+                  <div className="flex justify-between text-emerald-700 font-bold">
+                    <span className="flex items-center gap-1">
+                      <Percent className="w-3 h-3" />
+                      <span>Pharmacy Discount</span>
+                    </span>
+                    <span>- ₹{cartDiscount}</span>
+                  </div>
+                )}
+
+                <div className="flex justify-between">
+                  <span>Delivery Charges (Borivali)</span>
+                  {deliveryFee === 0 ? (
+                    <span className="font-bold text-emerald-700">FREE</span>
+                  ) : (
+                    <span className="font-semibold text-slate-800">₹{deliveryFee}</span>
+                  )}
+                </div>
+
+                <div className="pt-2 border-t border-slate-100 flex justify-between text-sm sm:text-base font-black text-slate-900">
+                  <span>Total Payable</span>
+                  <span className="text-flora-800">₹{cartGrandTotal}</span>
+                </div>
               </div>
 
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2.5 py-3.5 px-4 rounded-2xl text-sm font-bold text-white bg-wa hover:bg-wa-dark shadow-md hover:shadow-glow transition transform active:scale-98"
+              {/* Checkout Button */}
+              <button
+                onClick={handleProceedToCheckout}
+                className="shimmer-button w-full py-3.5 px-5 rounded-2xl bg-flora-700 hover:bg-flora-800 text-white font-heading font-black text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition active:scale-95"
               >
-                <MessageCircle className="w-4 h-4 fill-current" />
-                <span>Send {totalCount} Items to WhatsApp</span>
+                <span>Proceed to Checkout (₹{cartGrandTotal})</span>
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </button>
 
-              <p className="text-center text-[11px] text-slate-400">
-                Payment made directly on delivery/store pickup via UPI, Cash, or Cards.
-              </p>
             </div>
           )}
 
