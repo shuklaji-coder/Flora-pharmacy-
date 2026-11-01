@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 /**
  * High-definition, realistic product packshot component.
@@ -8,8 +8,12 @@ import React, { useState } from 'react';
 function ProductPackshotComponent({ product }) {
   const [imgError, setImgError] = useState(false);
 
+  useEffect(() => {
+    setImgError(false);
+  }, [product?.image]);
+
   // 0. If a custom or admin image URL exists and has not errored, render the real photo!
-  if (product.image && !imgError) {
+  if (product?.image && !imgError) {
     return (
       <div className="w-full h-full bg-white flex items-center justify-center p-2 relative overflow-hidden select-none">
         <img

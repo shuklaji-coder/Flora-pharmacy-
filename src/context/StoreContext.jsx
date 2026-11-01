@@ -78,7 +78,7 @@ export function StoreProvider({ children }) {
   const [products, setProducts] = useState(() => {
     try {
       const savedVersion = localStorage.getItem('flora_catalog_version');
-      if (savedVersion === 'fmcg_15_v1') {
+      if (savedVersion === 'fmcg_15_v2') {
         const saved = localStorage.getItem('flora_products');
         if (saved) {
           const parsed = JSON.parse(saved);
@@ -86,7 +86,7 @@ export function StoreProvider({ children }) {
         }
       }
       // Initialize with user's selected 15 essential personal care products
-      localStorage.setItem('flora_catalog_version', 'fmcg_15_v1');
+      localStorage.setItem('flora_catalog_version', 'fmcg_15_v2');
       localStorage.setItem('flora_products', JSON.stringify(initialCatalog));
       return initialCatalog;
     } catch (e) {
@@ -483,7 +483,7 @@ export function StoreProvider({ children }) {
           if (!snapshot.empty) {
             const cloudProducts = snapshot.docs.map(d => ({ ...d.data(), id: d.id }));
             const savedVersion = localStorage.getItem('flora_catalog_version');
-            if (savedVersion === 'fmcg_15_v1') {
+            if (savedVersion === 'fmcg_15_v2') {
               setProducts(cloudProducts);
             }
           }
@@ -764,7 +764,7 @@ export function StoreProvider({ children }) {
     setProducts([]);
     try {
       localStorage.setItem('flora_products', JSON.stringify([]));
-      localStorage.setItem('flora_catalog_version', 'fmcg_15_v1');
+      localStorage.setItem('flora_catalog_version', 'fmcg_15_v2');
       if (db) {
         const snapshot = await getDocs(collection(db, "products"));
         snapshot.forEach((d) => deleteDoc(d.ref));

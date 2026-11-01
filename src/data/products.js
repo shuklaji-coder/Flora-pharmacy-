@@ -51,7 +51,7 @@ export const PRODUCTS = [
     ratingCount: 380,
     batchNumber: "RB-2026-D1",
     expiryDate: "2028-11",
-    image: "/images/products/dettol-antiseptic-250ml.jpg",
+    image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "Iconic Dettol antiseptic disinfectant for first aid, wound cleaning, personal hygiene, and antiseptic bathing."
   },
@@ -70,7 +70,7 @@ export const PRODUCTS = [
     ratingCount: 220,
     batchNumber: "JJ-2026-S1",
     expiryDate: "2028-09",
-    image: "/images/products/johnsons-baby-shampoo-200ml.jpg",
+    image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "No More Tears gentle formula for baby's soft hair and sensitive scalp, pediatrician and dermatologist tested."
   },
@@ -89,7 +89,7 @@ export const PRODUCTS = [
     ratingCount: 450,
     batchNumber: "PG-2026-P1",
     expiryDate: "2029-01",
-    image: "/images/products/pampers-medium-34.jpg",
+    image: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "Anti-rash blanket with lotion containing aloe vera for up to 12 hours of overnight dry comfort and leak protection."
   },
@@ -108,7 +108,7 @@ export const PRODUCTS = [
     ratingCount: 190,
     batchNumber: "HW-2026-W1",
     expiryDate: "2028-06",
-    image: "/images/products/himalaya-baby-wipes-72.jpg",
+    image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "Enriched with Lotus and Aloe Vera extracts to gently cleanse and moisturize delicate baby skin during diaper changes."
   },
@@ -127,7 +127,7 @@ export const PRODUCTS = [
     ratingCount: 520,
     batchNumber: "GD-2026-C1",
     expiryDate: "2028-12",
-    image: "/images/products/cetaphil-cleanser-125ml.jpg",
+    image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "Hydrating dermatologist-recommended facial cleanser with Vitamin B3 and Provitamin B5 for dry to normal sensitive skin."
   },
@@ -146,7 +146,7 @@ export const PRODUCTS = [
     ratingCount: 280,
     batchNumber: "NV-2026-N1",
     expiryDate: "2028-10",
-    image: "/images/products/nivea-soft-100ml.jpg",
+    image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "Non-greasy refreshing light moisturizing cream with Jojoba Oil and Vitamin E for instant face, hand and body softness."
   },
@@ -165,7 +165,7 @@ export const PRODUCTS = [
     ratingCount: 640,
     batchNumber: "UL-2026-V1",
     expiryDate: "2029-03",
-    image: "/images/products/vaseline-jelly-85g.jpg",
+    image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "100% pure triple-purified petroleum jelly to heal dry cracked skin, protect minor scrapes, and lock in deep moisture."
   },
@@ -184,7 +184,7 @@ export const PRODUCTS = [
     ratingCount: 310,
     batchNumber: "GSK-2026-S1",
     expiryDate: "2028-08",
-    image: "/images/products/sensodyne-fresh-gel-150g.jpg",
+    image: "https://images.unsplash.com/photo-1559591937-e1032b4b423f?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "Daily dentist-recommended fluoride toothpaste providing clinically proven 24/7 sensitivity protection and lasting fresh breath."
   },
@@ -203,7 +203,7 @@ export const PRODUCTS = [
     ratingCount: 420,
     batchNumber: "PG-2026-W1",
     expiryDate: "2029-02",
-    image: "/images/products/whisper-ultra-xl-30.jpg",
+    image: "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "Extra Large wings pads with lock-away core absorbing wetness 5x faster, neutralizing period odor for worry-free coverage."
   },
@@ -222,7 +222,7 @@ export const PRODUCTS = [
     ratingCount: 230,
     batchNumber: "JJ-2026-B1",
     expiryDate: "2029-06",
-    image: "/images/products/bandaid-waterproof-20.jpg",
+    image: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "100% waterproof adhesive strips with non-stick Quilt-Aid pad to seal out water, dirt and germs on minor cuts and wounds."
   },
@@ -241,7 +241,7 @@ export const PRODUCTS = [
     ratingCount: 260,
     batchNumber: "DB-2026-O1",
     expiryDate: "2028-07",
-    image: "/images/products/odomos-cream-100g.jpg",
+    image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "Non-sticky mosquito repellent cream with Vitamin E and Almond Oil providing certified 8-hour outdoor protection against dengue & malaria."
   },
@@ -260,7 +260,7 @@ export const PRODUCTS = [
     ratingCount: 310,
     batchNumber: "DN-2026-P1",
     expiryDate: "2028-05",
-    image: "/images/products/protinex-chocolate-400g.jpg",
+    image: "https://images.unsplash.com/photo-1579722821273-0f6c7d44362f?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "High protein nutrition drink mix with 34% protein, 22 essential vitamins and minerals for daily physical strength and active immunity."
   },
@@ -279,7 +279,7 @@ export const PRODUCTS = [
     ratingCount: 390,
     batchNumber: "HUL-2026-H1",
     expiryDate: "2028-04",
-    image: "/images/products/horlicks-malt-500g.jpg",
+    image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "Clinically proven malt-based nutrition drink that makes kids taller, stronger, and sharper with 23 vital micronutrients."
   },
@@ -298,7 +298,7 @@ export const PRODUCTS = [
     ratingCount: 340,
     batchNumber: "RB-2026-HW1",
     expiryDate: "2028-10",
-    image: "/images/products/dettol-handwash-675ml.jpg",
+    image: "https://images.unsplash.com/photo-1584362917165-526a968579e8?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "Antibacterial handwash with added moisturizers providing 99.9% germ protection while keeping hands soft and hygienic."
   },
@@ -317,7 +317,7 @@ export const PRODUCTS = [
     ratingCount: 460,
     batchNumber: "HW-2026-NF1",
     expiryDate: "2028-11",
-    image: "/images/products/himalaya-neem-150ml.jpg",
+    image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80",
     requiresPrescription: false,
     description: "Soap-free herbal formulation with Neem and Turmeric that cleanses impurities and helps clear and prevent pimples naturally."
   }
