@@ -114,7 +114,7 @@ export default function AdminPortal({ onExit }) {
     e.preventDefault();
     const success = loginAdmin(passwordInput.trim());
     if (!success) {
-      setLoginError("Galat password! Chief Pharmacist password daalein (e.g. flora2026 ya admin)");
+      setLoginError("Galat password! Sahi Chief Pharmacist secret key daalein.");
     } else {
       setLoginError("");
       setPasswordInput("");
@@ -720,7 +720,7 @@ export default function AdminPortal({ onExit }) {
                   type="password"
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
-                  placeholder="Enter Password (e.g. flora2026)"
+                  placeholder="Enter Chief Pharmacist Secret Key"
                   className="w-full pl-4 pr-10 py-3 rounded-2xl bg-slate-950 border border-slate-700 text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 text-sm font-mono tracking-wider"
                   autoFocus
                 />
@@ -745,8 +745,11 @@ export default function AdminPortal({ onExit }) {
           </form>
 
           <div className="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-            <span>🔑 Demo Password: <strong className="text-emerald-400">flora2026</strong> or <strong className="text-emerald-400">admin</strong></span>
-            <span className="text-emerald-500 font-bold">256-Bit SSL</span>
+            <span className="flex items-center gap-1.5 text-slate-400">
+              <Lock className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Authorized Pharmacist Access Only</span>
+            </span>
+            <span className="text-emerald-500 font-bold">256-Bit Encrypted</span>
           </div>
         </div>
 

@@ -681,8 +681,8 @@ export function StoreProvider({ children }) {
 
   // ADMIN OPERATIONS
   const loginAdmin = (password) => {
-    // Chief Pharmacist PIN / Password: flora2026 or admin
-    if (password === "flora2026" || password === "admin" || password === "flora@123") {
+    // Chief Pharmacist PIN / Secret Key
+    if (password === "prem34543") {
       setIsAdminLoggedIn(true);
       sessionStorage.setItem('flora_admin_auth', 'true');
       return true;
