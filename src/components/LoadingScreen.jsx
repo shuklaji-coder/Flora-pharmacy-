@@ -3,18 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, 
   ShieldCheck, 
-  Heart, 
   MapPin, 
   Clock, 
   Truck, 
   ArrowRight,
   Activity,
-  HeartPulse,
   CheckCircle2
 } from 'lucide-react';
 
 export default function LoadingScreen({ onFinish }) {
-  // Phase state: 'signal' (0s - 1.6s) -> 'mascot' (1.6s - 4.2s)
+  // Phase state: 'signal' (0s - 1.4s) -> 'mascot' (1.4s - 4.2s)
   const [phase, setPhase] = useState('signal');
   const [progress, setProgress] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
@@ -30,12 +28,12 @@ export default function LoadingScreen({ onFinish }) {
   const [statusIdx, setStatusIdx] = useState(0);
 
   useEffect(() => {
-    // Phase 1 to Phase 2 transition at 1.5s
+    // Transition from Signal to Mascot at 1.4s
     const phaseTimer = setTimeout(() => {
       setPhase('mascot');
-    }, 1500);
+    }, 1400);
 
-    // Smooth progress counter from 0 to 100% over 4.0s
+    // Smooth progress counter from 0 to 100%
     const totalDuration = 4000;
     const intervalTime = 30;
     const totalSteps = totalDuration / intervalTime;
@@ -58,7 +56,6 @@ export default function LoadingScreen({ onFinish }) {
 
       if (currentStep >= totalSteps) {
         clearInterval(progressTimer);
-        // Seamless exit transition
         setTimeout(() => {
           setIsExiting(true);
           setTimeout(() => {
@@ -87,70 +84,71 @@ export default function LoadingScreen({ onFinish }) {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-[#02190F] via-[#042E1D] to-[#01140B] text-white overflow-hidden transition-all duration-700 ease-out select-none ${
+      className={`fixed inset-0 z-50 flex flex-col justify-between items-center bg-gradient-to-br from-[#02180E] via-[#042E1D] to-[#01140B] text-white overflow-hidden p-4 sm:p-6 transition-all duration-700 ease-out select-none ${
         isExiting ? 'opacity-0 scale-105 pointer-events-none' : 'opacity-100 scale-100'
       }`}
     >
       {/* Ambient background glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 sm:w-[32rem] h-96 sm:h-[32rem] rounded-full bg-emerald-500/20 blur-[120px] pointer-events-none animate-pulse-glow" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-amber-400/10 blur-[100px] pointer-events-none" />
-      <div className="absolute top-1/3 left-1/4 w-60 h-60 rounded-full bg-teal-400/15 blur-[80px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[32rem] sm:w-[44rem] h-[32rem] sm:h-[44rem] rounded-full bg-emerald-500/20 blur-[130px] pointer-events-none animate-pulse-glow" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-amber-400/15 blur-[110px] pointer-events-none" />
+      <div className="absolute top-1/3 left-1/4 w-72 h-72 rounded-full bg-teal-400/15 blur-[90px] pointer-events-none" />
 
       {/* Floating subtle medical particles */}
-      <div className="absolute top-12 left-10 w-7 h-7 text-emerald-400/30 animate-particle-1 pointer-events-none">
+      <div className="absolute top-14 left-10 w-7 h-7 text-emerald-400/30 animate-particle-1 pointer-events-none">
         <svg viewBox="0 0 24 24" fill="currentColor">
           <path d="M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z" />
         </svg>
       </div>
-      <div className="absolute bottom-16 left-16 w-8 h-8 text-amber-300/25 animate-particle-2 pointer-events-none">
+      <div className="absolute bottom-20 left-12 w-8 h-8 text-amber-300/30 animate-particle-2 pointer-events-none">
         <Sparkles className="w-full h-full fill-current" />
       </div>
-      <div className="absolute top-20 right-14 w-6 h-6 text-teal-300/30 animate-particle-3 pointer-events-none">
+      <div className="absolute top-20 right-12 w-7 h-7 text-teal-300/30 animate-particle-3 pointer-events-none">
         <svg viewBox="0 0 24 24" fill="currentColor">
           <path d="M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z" />
         </svg>
       </div>
 
-      {/* Top Header: Skip Button & Location Pill */}
-      <div className="absolute top-5 inset-x-6 z-30 flex items-center justify-between pointer-events-auto">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[10.5px] sm:text-xs text-emerald-200">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-          <span className="font-semibold">Borivali East Counter • Live</span>
+      {/* TOP HEADER: Store Pill & Skip Button */}
+      <header className="relative z-30 w-full max-w-4xl flex items-center justify-between shrink-0 pointer-events-auto">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs text-emerald-200 shadow-md">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+          <span className="font-bold text-white tracking-wide">Flora Pharmacy</span>
+          <span className="text-emerald-300/70">• Borivali East</span>
         </div>
 
         <button
           type="button"
           onClick={handleSkip}
-          className="group flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-xs font-bold text-slate-200 hover:text-white transition border border-white/15 backdrop-blur-md cursor-pointer active:scale-95 shadow-md"
+          className="group flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-xs font-bold text-slate-100 hover:text-white transition border border-white/20 backdrop-blur-md cursor-pointer active:scale-95 shadow-md"
         >
           <span>Skip</span>
           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
         </button>
-      </div>
+      </header>
 
-      {/* Main Dynamic Stage: Switches from Signal to Mascot */}
-      <div className="relative z-10 flex flex-col items-center justify-center max-w-lg w-full px-4 text-center my-auto">
+      {/* CENTER STAGE: Dynamic Transition from Signal to FULL-SCREEN HERO MASCOT */}
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center w-full max-w-2xl my-auto text-center px-2">
         <AnimatePresence mode="wait">
           
           {/* ============================================================== */}
-          {/* PHASE 1: FLORA PHARMACY RADAR SIGNAL & BEACON (0.0s - 1.5s)   */}
+          {/* PHASE 1: FLORA PHARMACY RADAR SIGNAL & BEACON (0.0s - 1.4s)   */}
           {/* ============================================================== */}
           {phase === 'signal' && (
             <motion.div
               key="phase-signal"
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.88 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.92, y: -20, transition: { duration: 0.35 } }}
-              className="flex flex-col items-center"
+              exit={{ opacity: 0, scale: 0.92, y: -25, transition: { duration: 0.35 } }}
+              className="flex flex-col items-center justify-center my-auto"
             >
               {/* Radar Beacon with Concentric Ripple Rings */}
               <div className="relative mb-6">
-                <span className="absolute -inset-4 rounded-full bg-emerald-400/25 animate-ping opacity-40 pointer-events-none" />
-                <span className="absolute -inset-10 rounded-full bg-emerald-500/20 blur-2xl pointer-events-none" />
-                <span className="absolute -inset-2 rounded-3xl border-2 border-emerald-400/40 animate-pulse pointer-events-none" />
+                <span className="absolute -inset-6 rounded-full bg-emerald-400/25 animate-ping opacity-40 pointer-events-none" />
+                <span className="absolute -inset-14 rounded-full bg-emerald-500/20 blur-2xl pointer-events-none" />
+                <span className="absolute -inset-3 rounded-3xl border-2 border-emerald-400/40 animate-pulse pointer-events-none" />
 
                 {/* Glowing Medical Cross Shield */}
-                <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-emerald-500 via-flora-700 to-emerald-950 p-4 shadow-[0_0_50px_rgba(16,185,129,0.5)] border-2 border-emerald-300/50 flex items-center justify-center animate-heartbeat">
+                <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-br from-emerald-500 via-flora-700 to-emerald-950 p-4 shadow-[0_0_60px_rgba(16,185,129,0.55)] border-2 border-emerald-300/50 flex items-center justify-center animate-heartbeat">
                   <svg
                     viewBox="0 0 48 48"
                     fill="none"
@@ -170,10 +168,10 @@ export default function LoadingScreen({ onFinish }) {
               </div>
 
               {/* Cardiac ECG Line Pulse Animation */}
-              <div className="w-60 sm:w-72 h-8 sm:h-9 mb-3 flex items-center justify-center">
+              <div className="w-64 sm:w-80 h-9 sm:h-10 mb-3 flex items-center justify-center">
                 <svg
                   viewBox="0 0 300 50"
-                  className="w-full h-full stroke-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]"
+                  className="w-full h-full stroke-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.85)]"
                   fill="none"
                   strokeWidth="3.5"
                   strokeLinecap="round"
@@ -187,182 +185,152 @@ export default function LoadingScreen({ onFinish }) {
               </div>
 
               {/* Brand Typography */}
-              <div className="space-y-1">
+              <div className="space-y-1.5">
                 <div className="flex items-center justify-center gap-2 font-heading tracking-tight">
-                  <span className="text-3xl sm:text-4xl font-black text-[#FF4D30] drop-shadow-[0_2px_12px_rgba(255,77,48,0.4)]">
+                  <span className="text-3xl sm:text-5xl font-black text-[#FF4D30] drop-shadow-[0_2px_14px_rgba(255,77,48,0.5)]">
                     FLORA
                   </span>
-                  <span className="text-3xl sm:text-4xl font-black text-emerald-400 drop-shadow-[0_2px_12px_rgba(52,211,153,0.4)]">
+                  <span className="text-3xl sm:text-5xl font-black text-emerald-400 drop-shadow-[0_2px_14px_rgba(52,211,153,0.5)]">
                     PHARMACY
                   </span>
                 </div>
                 <p className="text-xs sm:text-sm font-semibold text-emerald-200/90 tracking-wide">
                   फ्लोर फार्मेसी • Borivali East, Mumbai
                 </p>
-                <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-[10.5px] font-bold text-emerald-300 mt-1">
-                  <Activity className="w-3 h-3 animate-pulse" />
-                  <span>Medical Signal Broadcast Active</span>
+                <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-xs font-bold text-emerald-300 mt-1">
+                  <Activity className="w-3.5 h-3.5 animate-pulse" />
+                  <span>Activating Store Counter Signal...</span>
                 </div>
               </div>
             </motion.div>
           )}
 
           {/* ============================================================== */}
-          {/* PHASE 2: ADORABLE MASCOT ARRIVES & DOES NAMASKAR 🙏 (1.5s - 4s)*/}
+          {/* PHASE 2: FULL-SCREEN HERO MASCOT WITH NAMASKAR 🙏 (1.4s - 4.2s)*/}
           {/* ============================================================== */}
           {phase === 'mascot' && (
             <motion.div
               key="phase-mascot"
-              initial={{ opacity: 0, y: 35, scale: 0.88 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.8, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.3 } }}
               transition={{
                 type: 'spring',
-                stiffness: 140,
-                damping: 16,
+                stiffness: 120,
+                damping: 14,
                 mass: 0.9
               }}
-              className="flex flex-col items-center w-full"
+              className="flex flex-col items-center justify-center w-full h-full max-h-[72vh]"
             >
-              {/* Mascot Floating Pedestal Frame */}
-              <div className="relative mb-3 flex flex-col items-center">
+              {/* Golden Pill Banner at top of Mascot */}
+              <motion.div
+                initial={{ opacity: 0, y: -15, scale: 0.85 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: 0.15, type: 'spring' }}
+                className="z-20 px-4 py-1 mb-2.5 rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-slate-950 text-xs sm:text-sm font-black uppercase tracking-wider shadow-xl flex items-center gap-2 border-2 border-amber-300/80"
+              >
+                <Sparkles className="w-4 h-4 fill-current text-slate-950" />
+                <span>🙏 Namaste Borivali East!</span>
+              </motion.div>
+
+              {/* HUGE HERO 3D MASCOT CHARACTER (DOMINATES FULL SCREEN) */}
+              <div className="relative flex flex-col items-center justify-center my-auto">
                 
-                {/* Radiant Champagne & Emerald Glowing Aura */}
+                {/* Massive Radiant Glow Halo */}
                 <motion.div
                   animate={{
-                    scale: [1, 1.1, 1],
-                    opacity: [0.5, 0.85, 0.5]
+                    scale: [1, 1.12, 1],
+                    opacity: [0.55, 0.9, 0.55]
                   }}
-                  transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute inset-0 m-auto w-56 sm:w-64 h-56 sm:h-64 bg-gradient-to-tr from-amber-400/35 via-emerald-400/40 to-teal-300/30 rounded-full blur-2xl pointer-events-none"
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute inset-0 m-auto w-72 sm:w-[26rem] h-72 sm:h-[26rem] bg-gradient-to-tr from-amber-400/40 via-emerald-400/45 to-teal-300/35 rounded-full blur-3xl pointer-events-none"
                 />
 
-                {/* Golden Badge cleanly above Mascot (zero face overlap) */}
-                <motion.div
-                  initial={{ opacity: 0, y: -10, scale: 0.8 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ delay: 0.2, type: 'spring' }}
-                  className="z-20 px-4 py-1 mb-2 rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-slate-950 text-[11px] sm:text-xs font-black uppercase tracking-wider shadow-lg flex items-center gap-1.5 border border-amber-300"
-                >
-                  <Sparkles className="w-3.5 h-3.5 fill-current text-slate-950" />
-                  <span>Namaskar! Welcome</span>
-                </motion.div>
-
-                {/* 3D Mascot Character with Chest-Level Namaste 🙏 & 100% Clear Smiling Face */}
+                {/* Hero Mascot Framed Luxury Podium */}
                 <motion.div
                   animate={{
-                    y: [0, -6, 0],
-                    rotate: [0, 1, 0, -1, 0]
+                    y: [0, -8, 0],
+                    rotate: [0, 0.8, 0, -0.8, 0]
                   }}
                   transition={{
-                    duration: 3,
+                    duration: 3.2,
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
-                  className="relative w-44 h-48 sm:w-52 sm:h-56 rounded-3xl bg-gradient-to-b from-white via-emerald-50/80 to-amber-50/70 p-3 border-2 border-amber-300/80 shadow-[0_15px_45px_rgba(0,0,0,0.45)] flex items-center justify-center overflow-hidden"
+                  className="relative rounded-[32px] sm:rounded-[40px] bg-gradient-to-b from-white via-emerald-50/90 to-amber-50/80 p-3 sm:p-5 border-3 border-amber-300/90 shadow-[0_25px_80px_rgba(0,0,0,0.6)] flex items-center justify-center overflow-hidden"
                 >
+                  {/* FULL SCREEN HERO HEIGHT IMAGE */}
                   <img
                     src="/images/flora-mascot-namaste.png"
-                    alt="Flora Pharmacy Mascot Namaskar Greeting"
-                    className="max-h-full max-w-full object-contain filter drop-shadow-md select-none transform hover:scale-105 transition-transform"
+                    alt="Flora Pharmacy Pharmacist Mascot Namaskar"
+                    className="h-[38vh] sm:h-[46vh] md:h-[50vh] max-h-[440px] w-auto object-contain select-none filter drop-shadow-2xl transform hover:scale-105 transition-transform duration-300"
                   />
                 </motion.div>
 
-                {/* Soft Pedestal Shadow */}
-                <div className="w-32 sm:w-40 h-2 bg-black/30 rounded-full blur-xs mt-1.5" />
+                {/* Grounding Pedestal Shadow */}
+                <div className="w-48 sm:w-64 h-3 bg-black/40 rounded-full blur-xs mt-2" />
               </div>
 
-              {/* Warm Indian Namaskar Speech Card */}
+              {/* Headline & Welcoming Subtext */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.92, y: 15 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ delay: 0.15, type: 'spring', stiffness: 180 }}
-                className="w-full max-w-sm bg-gradient-to-b from-white via-slate-50 to-amber-50/60 rounded-3xl p-4 sm:p-5 text-slate-900 shadow-2xl border-2 border-amber-200/80 relative"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, type: 'spring' }}
+                className="mt-2.5 space-y-1"
               >
-                {/* Greeting Header */}
-                <div className="space-y-1">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300/70 text-[11px] font-black uppercase tracking-wider">
-                    <span>🙏 Namaste Borivali East!</span>
-                  </div>
-
-                  <h3 className="font-heading font-black text-slate-900 text-base sm:text-lg leading-tight mt-1">
-                    Flora Pharmacy me Aapka Swagat Hai
-                  </h3>
-
-                  <p className="text-[11.5px] sm:text-xs text-slate-600 font-medium leading-relaxed max-w-xs mx-auto">
-                    Aapke Chief Pharmacist <strong className="text-emerald-800">Premprakash Sirvi</strong> dwara 100% Genuine Medicines & 30-Minute Fast Delivery.
-                  </p>
-                </div>
-
-                {/* 3 Quick Trust Guarantees */}
-                <div className="grid grid-cols-3 gap-1.5 mt-3 pt-2.5 border-t border-slate-200/80 text-center">
-                  <div className="p-1.5 rounded-xl bg-slate-100/90 border border-slate-200/70">
-                    <Truck className="w-3.5 h-3.5 text-emerald-700 mx-auto mb-0.5" />
-                    <span className="block text-[10px] font-black text-slate-900">30 Mins</span>
-                    <span className="text-[8.5px] text-slate-500 font-semibold">Express</span>
-                  </div>
-                  <div className="p-1.5 rounded-xl bg-slate-100/90 border border-slate-200/70">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 mx-auto mb-0.5" />
-                    <span className="block text-[10px] font-black text-slate-900">100% Genuine</span>
-                    <span className="text-[8.5px] text-slate-500 font-semibold">Fresh Stock</span>
-                  </div>
-                  <div className="p-1.5 rounded-xl bg-slate-100/90 border border-slate-200/70">
-                    <Clock className="w-3.5 h-3.5 text-emerald-700 mx-auto mb-0.5" />
-                    <span className="block text-[10px] font-black text-slate-900">9 AM – 11 PM</span>
-                    <span className="text-[8.5px] text-slate-500 font-semibold">Open Daily</span>
-                  </div>
-                </div>
+                <h3 className="font-heading font-black text-white text-lg sm:text-2xl drop-shadow-md">
+                  Flora Pharmacy Me Aapka Swagat Hai!
+                </h3>
+                <p className="text-xs sm:text-sm text-emerald-200/90 font-medium max-w-md mx-auto">
+                  Chief Pharmacist <strong className="text-amber-300 font-bold">Premprakash Sirvi</strong> • 100% Genuine Medicines in 30 Mins
+                </p>
               </motion.div>
             </motion.div>
           )}
 
         </AnimatePresence>
+      </main>
 
-        {/* ============================================================== */}
-        {/* SHARED DYNAMIC PROGRESS BAR & STATUS TICKER                    */}
-        {/* ============================================================== */}
-        <div className="w-64 sm:w-80 mt-5 space-y-2">
-          
-          {/* Progress Track */}
-          <div className="w-full h-2.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 overflow-hidden relative shadow-inner">
-            <motion.div
-              className="h-full bg-gradient-to-r from-emerald-500 via-teal-300 to-amber-400 rounded-full relative"
-              style={{ width: `${progress}%` }}
-              transition={{ ease: "easeOut" }}
-            >
-              {/* Shimmer light sweep */}
-              <div className="absolute inset-0 bg-white/35 animate-shimmer-sweep" />
-            </motion.div>
-          </div>
-
-          {/* Progress Percentage & Status */}
-          <div className="flex items-center justify-between text-[11px] text-emerald-300 font-mono">
-            <span className="font-bold flex items-center gap-1">
-              <span>{progress}%</span>
-              {progress === 100 && <CheckCircle2 className="w-3 h-3 text-emerald-400" />}
-            </span>
-            <span className="text-[10px] text-emerald-400/90 flex items-center gap-1 font-sans font-semibold">
-              <ShieldCheck className="w-3 h-3 text-emerald-400" /> Borivali East Counter
-            </span>
-          </div>
-
-          {/* Live Status Message */}
-          <div className="h-5 flex items-center justify-center">
-            <p className="text-[11px] text-slate-300/90 font-medium animate-fade-in truncate">
-              {statusMessages[statusIdx]}
-            </p>
-          </div>
-
+      {/* BOTTOM FOOTER: Dynamic Progress Bar, Status Ticker & Location */}
+      <footer className="relative z-30 w-full max-w-md flex flex-col items-center space-y-2 shrink-0">
+        
+        {/* Progress Track */}
+        <div className="w-full h-2.5 rounded-full bg-emerald-950/90 border border-emerald-500/40 overflow-hidden relative shadow-inner">
+          <motion.div
+            className="h-full bg-gradient-to-r from-emerald-500 via-teal-300 to-amber-400 rounded-full relative"
+            style={{ width: `${progress}%` }}
+            transition={{ ease: "easeOut" }}
+          >
+            {/* Shimmer light sweep */}
+            <div className="absolute inset-0 bg-white/40 animate-shimmer-sweep" />
+          </motion.div>
         </div>
 
-        {/* Store Location Footer Badge */}
-        <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/5 border border-white/10 text-[9.5px] text-slate-400">
+        {/* Progress Percentage & Status */}
+        <div className="w-full flex items-center justify-between text-xs text-emerald-300 font-mono">
+          <span className="font-bold flex items-center gap-1.5">
+            <span>{progress}%</span>
+            {progress === 100 && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
+          </span>
+          <span className="text-[11px] text-emerald-300/90 font-sans font-semibold flex items-center gap-1">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> 100% Genuine Certified
+          </span>
+        </div>
+
+        {/* Live Status Message Ticker */}
+        <div className="h-5 flex items-center justify-center">
+          <p className="text-xs text-slate-200 font-medium animate-fade-in truncate">
+            {statusMessages[statusIdx]}
+          </p>
+        </div>
+
+        {/* Store Location Pill */}
+        <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/5 border border-white/10 text-[10px] text-slate-400">
           <MapPin className="w-3 h-3 text-emerald-400" />
           <span>Shop 7, Samarpan, Next to Magathane Metro, Borivali East</span>
         </div>
 
-      </div>
-
+      </footer>
     </div>
   );
 }
