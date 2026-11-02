@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { CATEGORIES, PRODUCTS } from '../data/products';
+import { CATEGORIES, PRODUCTS as defaultProducts } from '../data/products';
+import { useStore } from '../context/StoreContext';
 import { getProductWhatsAppUrl } from '../data/business';
 import ProductPackshot from './ProductPackshot';
 import { 
@@ -53,6 +54,9 @@ export default function ProductSlider({
     setSearchQuery(query);
     if (onSearchChange) onSearchChange(query);
   };
+
+  const store = useStore ? useStore() : null;
+  const PRODUCTS = store?.products || defaultProducts;
 
   // Filter products based on Category and Search Query
   const filteredProducts = PRODUCTS.filter((item) => {

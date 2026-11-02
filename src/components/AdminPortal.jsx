@@ -40,8 +40,10 @@ import {
   MapPin,
   CheckCircle,
   Upload,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Loader2
 } from 'lucide-react';
+import { compressImage, sanitizeImageUrl } from '../utils/imageCompressor';
 
 export default function AdminPortal({ onExit }) {
   const { 
@@ -109,6 +111,7 @@ export default function AdminPortal({ onExit }) {
   const [editMrp, setEditMrp] = useState("");
   const [editImage, setEditImage] = useState("");
   const [editStock, setEditStock] = useState("");
+  const [isCompressingImg, setIsCompressingImg] = useState(false);
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
@@ -541,34 +544,36 @@ export default function AdminPortal({ onExit }) {
     window.open(url, '_blank');
   };
 
-  // Handle Image File Upload directly from phone/device
-  const handleImageFileChange = (e) => {
+  // Handle Image File Upload directly from phone/device with auto compression
+  const handleImageFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 3 * 1024 * 1024) {
-        alert("Image size should be under 3MB.");
-        return;
+      try {
+        setIsCompressingImg(true);
+        const compressed = await compressImage(file, 800, 800, 0.82);
+        setNewProdImage(compressed);
+      } catch (err) {
+        console.error("Image compression error:", err);
+        alert("Photo process nahi ho paayi. Kripya doosri photo select karein.");
+      } finally {
+        setIsCompressingImg(false);
       }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setNewProdImage(reader.result);
-      };
-      reader.readAsDataURL(file);
     }
   };
 
-  const handleEditImageFileChange = (e) => {
+  const handleEditImageFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 3 * 1024 * 1024) {
-        alert("Image size should be under 3MB.");
-        return;
+      try {
+        setIsCompressingImg(true);
+        const compressed = await compressImage(file, 800, 800, 0.82);
+        setEditImage(compressed);
+      } catch (err) {
+        console.error("Image compression error:", err);
+        alert("Photo process nahi ho paayi. Kripya doosri photo select karein.");
+      } finally {
+        setIsCompressingImg(false);
       }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setEditImage(reader.result);
-      };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -585,6 +590,7 @@ export default function AdminPortal({ onExit }) {
     }
     const price = Number(newProdPrice);
     const mrp = Number(newProdMrp) || Math.round(price * 1.15);
+    const finalImage = sanitizeImageUrl(newProdImage);
 
     addProduct({
       name: newProdName.trim(),
@@ -596,7 +602,7 @@ export default function AdminPortal({ onExit }) {
       stockQuantity: Number(newProdStock) || 50,
       batchNumber: newProdBatch.trim() || "FL-2026-B1",
       expiryDate: newProdExpiry.trim() || "2028-12",
-      image: newProdImage.trim() || "",
+      image: finalImage,
       requiresPrescription: newProdRequiresRx,
       description: `${newProdName.trim()} stocked in Borivali East counter inventory.`
     });
@@ -1581,8 +1587,34 @@ export default function AdminPortal({ onExit }) {
                       {filteredInventory.slice(0, 50).map((prod) => (
                         <tr key={prod.id} className="hover:bg-slate-800/40 transition">
                           <td className="py-3 pr-2">
-                            <div className="font-bold text-white max-w-xs">{prod.name}</div>
-                            <span className="text-[10px] text-slate-400">{prod.brandInfo || "Flora Certified"} • {prod.form || "1 Pack"}</span>
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-11 h-11 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center p-1 shrink-0 overflow-hidden relative">
+                                {prod.image ? (
+                                  <img 
+                                    src={prod.image} 
+                                    alt={prod.name} 
+                                    referrerPolicy="no-referrer"
+                                    className="max-h-full max-w-full object-contain" 
+                                    onError={(e) => { e.target.style.display = 'none'; }}
+                                  />
+                                ) : (
+                                  <ImageIcon className="w-4 h-4 text-slate-600" />
+                                )}
+                              </div>
+                              <div className="min-w-0">
+                                <div className="font-bold text-white max-w-xs truncate">{prod.name}</div>
+                                <span className="text-[10px] text-slate-400 block truncate">
+                                  {prod.brandInfo || "Flora Certified"} • {prod.form || "1 Pack"}
+                                </span>
+                                {prod.image ? (
+                                  <span className="text-[9.5px] font-bold text-emerald-400 flex items-center gap-1 mt-0.5">
+                                    <CheckCircle className="w-2.5 h-2.5" /> Photo Active
+                                  </span>
+                                ) : (
+                                  <span className="text-[9.5px] text-slate-500">3D Packshot</span>
+                                )}
+                              </div>
+                            </div>
                           </td>
                           <td className="py-3 text-slate-300">{prod.category}</td>
                           <td className="py-3 font-mono text-slate-400 line-through">₹{prod.mrp || prod.price}</td>
@@ -2284,16 +2316,23 @@ export default function AdminPortal({ onExit }) {
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 items-center">
                   {/* File Upload Button */}
-                  <label className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer transition text-xs font-bold">
-                    <Upload className="w-4 h-4 text-emerald-400" />
-                    <span>Upload from Phone/PC</span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageFileChange}
-                      className="hidden"
-                    />
-                  </label>
+                  {isCompressingImg ? (
+                    <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-slate-800 text-emerald-400 border border-slate-700 text-xs font-bold">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Compressing photo...</span>
+                    </div>
+                  ) : (
+                    <label className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer transition text-xs font-bold">
+                      <Upload className="w-4 h-4 text-emerald-400" />
+                      <span>Upload from Phone/PC</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageFileChange}
+                        className="hidden"
+                      />
+                    </label>
+                  )}
 
                   {/* Or Path / URL */}
                   <div className="relative">
@@ -2315,6 +2354,7 @@ export default function AdminPortal({ onExit }) {
                         <img 
                           src={newProdImage} 
                           alt="Preview" 
+                          referrerPolicy="no-referrer"
                           className="max-h-full max-w-full object-contain"
                           onError={(e) => { e.target.style.display = 'none'; }}
                         />
@@ -2398,16 +2438,23 @@ export default function AdminPortal({ onExit }) {
                 <label className="block text-slate-300 font-bold">Product Photo / Packshot</label>
                 
                 <div className="flex items-center gap-2">
-                  <label className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer text-xs font-bold transition">
-                    <Upload className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Upload New Photo</span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleEditImageFileChange}
-                      className="hidden"
-                    />
-                  </label>
+                  {isCompressingImg ? (
+                    <div className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 text-emerald-400 border border-slate-700 text-xs font-bold">
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <span>Compressing photo...</span>
+                    </div>
+                  ) : (
+                    <label className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer text-xs font-bold transition">
+                      <Upload className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Upload New Photo</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleEditImageFileChange}
+                        className="hidden"
+                      />
+                    </label>
+                  )}
                   {editImage && (
                     <button
                       type="button"
@@ -2433,6 +2480,7 @@ export default function AdminPortal({ onExit }) {
                       <img 
                         src={editImage} 
                         alt="Preview" 
+                        referrerPolicy="no-referrer"
                         className="max-h-full max-w-full object-contain" 
                         onError={(e) => { e.target.style.display = 'none'; }} 
                       />
@@ -2497,11 +2545,12 @@ export default function AdminPortal({ onExit }) {
                     const mrp = Number(editMrp) || price;
                     const discount = Math.max(0, Math.round(((mrp - price) / mrp) * 100));
                     const stockQuantity = Number(editStock) || editingProduct.stockQuantity || 30;
+                    const finalImage = sanitizeImageUrl(editImage);
                     updateProduct(editingProduct.id, { 
                       price, 
                       mrp, 
                       discount, 
-                      image: editImage.trim(),
+                      image: finalImage,
                       stockQuantity 
                     });
                     setProductToast(`"${editingProduct.name}" updated successfully!`);

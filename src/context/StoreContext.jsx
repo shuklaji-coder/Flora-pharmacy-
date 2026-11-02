@@ -482,10 +482,24 @@ export function StoreProvider({ children }) {
           setIsFirestoreConnected(true);
           if (!snapshot.empty) {
             const cloudProducts = snapshot.docs.map(d => ({ ...d.data(), id: d.id }));
-            const savedVersion = localStorage.getItem('flora_catalog_version');
-            if (savedVersion === 'fmcg_15_v2') {
-              setProducts(cloudProducts);
-            }
+            setProducts((prev) => {
+              // Smart merge: merge cloud products into catalog products so we NEVER lose local items
+              const map = new Map();
+              prev.forEach(p => map.set(p.id, p));
+              cloudProducts.forEach(cp => {
+                const existing = map.get(cp.id) || {};
+                map.set(cp.id, {
+                  ...existing,
+                  ...cp,
+                  image: cp.image || existing.image || ""
+                });
+              });
+              const merged = Array.from(map.values());
+              try {
+                localStorage.setItem('flora_products', JSON.stringify(merged));
+              } catch (e) {}
+              return merged;
+            });
           }
         }, (err) => {
           console.warn("Firestore products live listener notice:", err.message);
@@ -719,12 +733,20 @@ export function StoreProvider({ children }) {
       ...productData,
       discount: Math.round((((productData.mrp || productData.price) - productData.price) / (productData.mrp || productData.price)) * 100)
     };
-    setProducts((prev) => [newProduct, ...prev]);
+    setProducts((prev) => {
+      const next = [newProduct, ...prev];
+      try {
+        localStorage.setItem('flora_products', JSON.stringify(next));
+      } catch (e) {
+        console.warn("Storage warning saving new product:", e);
+      }
+      return next;
+    });
 
-    // Save into Firestore Database
+    // Save into Firestore Database with merge: true
     try {
       if (db) {
-        await setDoc(doc(db, "products", newProduct.id), newProduct);
+        await setDoc(doc(db, "products", newProduct.id), newProduct, { merge: true });
       }
     } catch (e) {
       console.warn("Firestore add product notice:", e);
@@ -733,14 +755,31 @@ export function StoreProvider({ children }) {
   };
 
   const updateProduct = async (productId, updatedFields) => {
-    setProducts((prev) =>
-      prev.map((prod) => (prod.id === productId ? { ...prod, ...updatedFields } : prod))
-    );
+    let mergedProduct = null;
+    setProducts((prev) => {
+      const next = prev.map((prod) => {
+        if (prod.id === productId) {
+          mergedProduct = { ...prod, ...updatedFields };
+          return mergedProduct;
+        }
+        return prod;
+      });
 
-    // Update in Firestore Database
+      // Immediately persist to localStorage
+      try {
+        localStorage.setItem('flora_products', JSON.stringify(next));
+      } catch (err) {
+        console.warn("Storage warning saving updated product:", err);
+      }
+      return next;
+    });
+
+    // Update / Upsert in Firestore Database with merge: true
     try {
       if (db) {
-        await updateDoc(doc(db, "products", productId), updatedFields);
+        // Find existing or updated fields
+        const payload = mergedProduct || updatedFields;
+        await setDoc(doc(db, "products", productId), payload, { merge: true });
       }
     } catch (e) {
       console.warn("Firestore update product notice:", e);
@@ -748,7 +787,13 @@ export function StoreProvider({ children }) {
   };
 
   const deleteProduct = async (productId) => {
-    setProducts((prev) => prev.filter((prod) => prod.id !== productId));
+    setProducts((prev) => {
+      const next = prev.filter((prod) => prod.id !== productId);
+      try {
+        localStorage.setItem('flora_products', JSON.stringify(next));
+      } catch (e) {}
+      return next;
+    });
 
     // Delete from Firestore Database
     try {

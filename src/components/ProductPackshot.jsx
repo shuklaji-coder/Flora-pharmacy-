@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { sanitizeImageUrl } from '../utils/imageCompressor';
 
 /**
  * High-definition, realistic product packshot component.
@@ -8,18 +9,26 @@ import React, { useState, useEffect } from 'react';
 function ProductPackshotComponent({ product }) {
   const [imgError, setImgError] = useState(false);
 
-  useEffect(() => {
-    setImgError(false);
+  const cleanImage = useMemo(() => {
+    return sanitizeImageUrl(product?.image);
   }, [product?.image]);
 
+  useEffect(() => {
+    setImgError(false);
+  }, [cleanImage]);
+
   // 0. If a custom or admin image URL exists and has not errored, render the real photo!
-  if (product?.image && !imgError) {
+  if (cleanImage && !imgError) {
     return (
       <div className="w-full h-full bg-white flex items-center justify-center p-2 relative overflow-hidden select-none">
         <img
-          src={product.image}
-          alt={product.name}
-          onError={() => setImgError(true)}
+          src={cleanImage}
+          alt={product?.name || "Product"}
+          referrerPolicy="no-referrer"
+          onError={() => {
+            console.warn("Product image failed to load, using packshot fallback:", cleanImage);
+            setImgError(true);
+          }}
           className="max-h-full max-w-full object-contain filter drop-shadow-2xs transition-transform duration-300 group-hover:scale-105"
           loading="lazy"
         />
