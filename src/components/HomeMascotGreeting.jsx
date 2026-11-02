@@ -125,7 +125,7 @@ export default function HomeMascotGreeting() {
                   className="relative bg-gradient-to-b from-[#FFFDF9] via-[#FAF5EC] to-[#F5EBE0] p-3 sm:p-5 rounded-3xl sm:rounded-[36px] border-2 sm:border-3 border-[#DFC09E] shadow-[0_20px_60px_rgba(2,35,23,0.5)] flex flex-col items-center"
                 >
                   <img
-                    src="/images/flora-mascot-key.png"
+                    src="/images/flora-mascot-namaste.png"
                     alt="Flora Pharmacy Pharmacist Mascot"
                     className="w-32 sm:w-48 md:w-56 h-auto object-contain select-none drop-shadow-xl"
                   />
@@ -246,7 +246,7 @@ export default function HomeMascotGreeting() {
               {/* Mascot Mini Image */}
               <div className="w-11 h-11 rounded-full bg-white p-0.5 border border-[#DFC09E] shadow-2xs overflow-hidden flex items-center justify-center shrink-0">
                 <img
-                  src="/images/flora-mascot-key.png"
+                  src="/images/flora-mascot-namaste.png"
                   alt="Flora Mascot"
                   className="w-full h-full object-contain"
                 />
