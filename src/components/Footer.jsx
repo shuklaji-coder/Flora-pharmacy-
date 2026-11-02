@@ -184,9 +184,15 @@ export default function Footer() {
           <p>
             © {currentYear} Flora Pharmacy. All rights reserved. Borivali East, Mumbai.
           </p>
-          <div className="flex items-center gap-1">
-            <span>Crafted for patient care in Mumbai</span>
-            <Heart className="w-3.5 h-3.5 text-red-500 fill-current ml-0.5" />
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <span className="text-slate-400 font-medium">
+              Designed by <strong className="text-emerald-400 font-bold tracking-wide">Codexa Technologies</strong>
+            </span>
+            <span className="hidden sm:inline text-slate-700">•</span>
+            <div className="flex items-center gap-1">
+              <span>Crafted with care</span>
+              <Heart className="w-3.5 h-3.5 text-red-500 fill-current ml-0.5" />
+            </div>
           </div>
         </div>
 
