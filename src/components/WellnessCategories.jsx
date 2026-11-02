@@ -162,7 +162,8 @@ export default function WellnessCategories() {
         {/* Scrollable category circles / pills */}
         <div 
           ref={scrollContainerRef}
-          className="flex items-stretch gap-3 sm:gap-4 overflow-x-auto pb-2 pt-1 no-scrollbar select-none"
+          className="flex items-stretch gap-2.5 sm:gap-4 overflow-x-auto pb-2 pt-1 no-scrollbar select-none touch-pan-x"
+          style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {categories.map((cat) => {
             const Icon = cat.icon;
@@ -172,7 +173,7 @@ export default function WellnessCategories() {
               <button
                 key={cat.name}
                 onClick={() => handleSelect(cat.name)}
-                className={`group shrink-0 min-w-[110px] sm:min-w-[125px] p-3 rounded-2xl border transition-all duration-200 flex flex-col items-center justify-between text-center ${
+                className={`group shrink-0 min-w-[96px] sm:min-w-[125px] p-2.5 sm:p-3 rounded-2xl border transition-all duration-200 flex flex-col items-center justify-between text-center active:scale-95 ${
                   isSelected
                     ? 'bg-flora-700 text-white border-flora-700 shadow-soft scale-102 ring-2 ring-emerald-400/40'
                     : 'bg-surface-light hover:bg-slate-50 border-slate-200/90 text-slate-800 hover:border-emerald-300 hover:shadow-2xs'
@@ -180,7 +181,7 @@ export default function WellnessCategories() {
               >
                 {/* Icon Container */}
                 <div
-                  className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 border shadow-2xs mb-2 ${
+                  className={`w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 border shadow-2xs mb-1.5 sm:mb-2 ${
                     isSelected ? 'bg-white/20 text-white border-white/30' : cat.color
                   }`}
                 >

@@ -51,8 +51,8 @@ export default function CartDrawer() {
         aria-hidden="true"
       />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col h-full animate-fade-in-up">
+      <div className="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10 w-full sm:w-auto">
+        <div className="w-full sm:w-screen sm:max-w-md bg-white shadow-2xl flex flex-col h-full animate-fade-in-up">
           
           {/* Drawer Header */}
           <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
@@ -216,7 +216,7 @@ export default function CartDrawer() {
 
           {/* Drawer Footer & Bill Breakdown */}
           {cart.length > 0 && (
-            <div className="p-4 sm:p-5 border-t border-slate-200 bg-white space-y-3.5 shadow-lg">
+            <div className="p-4 sm:p-5 border-t border-slate-200 bg-white space-y-3.5 shadow-lg pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
               
               {/* Price Breakdown */}
               <div className="space-y-1.5 text-xs text-slate-600">

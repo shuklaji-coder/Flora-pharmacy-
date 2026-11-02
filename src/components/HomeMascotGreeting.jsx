@@ -54,7 +54,7 @@ export default function HomeMascotGreeting() {
       {/* 1. CENTER SCREEN ANIMATION OVERLAY */}
       <AnimatePresence>
         {isVisible && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-hidden pointer-events-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto pointer-events-auto no-scrollbar">
             
             {/* Ambient Backdrop with soft blur and champagne tint */}
             <motion.div
@@ -63,16 +63,16 @@ export default function HomeMascotGreeting() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
               onClick={handleDismiss}
-              className="fixed inset-0 bg-[#022317]/65 backdrop-blur-sm"
+              className="fixed inset-0 bg-[#022317]/70 backdrop-blur-sm"
             />
 
             {/* Ambient Radial Lights behind the Mascot */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[28rem] h-[28rem] bg-[#DFC09E]/20 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-[#10B981]/25 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 sm:w-[28rem] h-72 sm:h-[28rem] bg-[#DFC09E]/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-60 sm:w-80 h-60 sm:h-80 bg-[#10B981]/25 rounded-full blur-3xl pointer-events-none" />
 
             {/* MASCOT SLIDING FROM FAR LEFT TO CENTER & STOPPING IN MIDDLE */}
             <motion.div
-              initial={{ x: '-120vw', rotate: -15, scale: 0.8, opacity: 0 }}
+              initial={{ x: '-100vw', rotate: -10, scale: 0.85, opacity: 0 }}
               animate={{ x: 0, rotate: 0, scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0, y: 100, transition: { duration: 0.4 } }}
               transition={{
@@ -84,7 +84,7 @@ export default function HomeMascotGreeting() {
               onAnimationComplete={() => {
                 setHasStoppedInCenter(true);
               }}
-              className="relative z-10 flex flex-col items-center max-w-lg w-full"
+              className="relative z-10 flex flex-col items-center max-w-lg w-full my-auto py-4"
             >
               
               {/* Mascot Floating Box with Champagne Gold Border */}
@@ -97,7 +97,7 @@ export default function HomeMascotGreeting() {
                     opacity: [0.6, 0.9, 0.6]
                   }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute inset-0 m-auto w-64 h-64 bg-gradient-to-tr from-[#DFC09E]/40 via-[#10B981]/30 to-[#F5E9D8]/30 rounded-full blur-2xl pointer-events-none"
+                  className="absolute inset-0 m-auto w-52 sm:w-64 h-52 sm:h-64 bg-gradient-to-tr from-[#DFC09E]/40 via-[#10B981]/30 to-[#F5E9D8]/30 rounded-full blur-2xl pointer-events-none"
                 />
 
                 {/* Golden Key Sparkles Indicator */}
@@ -105,16 +105,16 @@ export default function HomeMascotGreeting() {
                   initial={{ opacity: 0, scale: 0 }}
                   animate={hasStoppedInCenter ? { opacity: 1, scale: 1 } : {}}
                   transition={{ delay: 0.2, type: 'spring' }}
-                  className="absolute -top-3 sm:-top-4 z-20 px-3.5 py-1 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#F5E2B8] to-[#C5A059] text-[#022418] text-xs font-black uppercase tracking-wider shadow-lg flex items-center gap-1.5 border border-[#DFC09E]"
+                  className="absolute -top-3 z-20 px-3 py-0.5 sm:px-3.5 sm:py-1 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#F5E2B8] to-[#C5A059] text-[#022418] text-[10px] sm:text-xs font-black uppercase tracking-wider shadow-lg flex items-center gap-1.5 border border-[#DFC09E]"
                 >
-                  <KeyRound className="w-3.5 h-3.5 text-[#022418]" />
-                  <span>Flora Care Mascot • 30-Min Delivery</span>
+                  <KeyRound className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#022418]" />
+                  <span>Flora Buddy • 30m Express</span>
                 </motion.div>
 
                 {/* 3D Mascot Character holding Key & Waving */}
                 <motion.div
                   animate={hasStoppedInCenter ? {
-                    y: [0, -8, 0],
+                    y: [0, -6, 0],
                     rotate: [0, 1.5, 0, -1.5, 0]
                   } : {}}
                   transition={{
@@ -122,16 +122,16 @@ export default function HomeMascotGreeting() {
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
-                  className="relative bg-gradient-to-b from-[#FFFDF9] via-[#FAF5EC] to-[#F5EBE0] p-4 sm:p-5 rounded-[36px] border-3 border-[#DFC09E] shadow-[0_20px_60px_rgba(2,35,23,0.5)] flex flex-col items-center"
+                  className="relative bg-gradient-to-b from-[#FFFDF9] via-[#FAF5EC] to-[#F5EBE0] p-3 sm:p-5 rounded-3xl sm:rounded-[36px] border-2 sm:border-3 border-[#DFC09E] shadow-[0_20px_60px_rgba(2,35,23,0.5)] flex flex-col items-center"
                 >
                   <img
                     src="/images/flora-mascot-key.png"
                     alt="Flora Pharmacy Pharmacist Mascot"
-                    className="w-44 sm:w-52 md:w-60 h-auto object-contain select-none drop-shadow-xl"
+                    className="w-32 sm:w-48 md:w-56 h-auto object-contain select-none drop-shadow-xl"
                   />
                   
                   {/* Mascot Stand base reflection */}
-                  <div className="w-36 h-3 bg-[#DFC09E]/40 rounded-full blur-xs mt-1" />
+                  <div className="w-28 sm:w-36 h-2.5 sm:h-3 bg-[#DFC09E]/40 rounded-full blur-xs mt-1" />
                 </motion.div>
 
               </div>
@@ -234,7 +234,7 @@ export default function HomeMascotGreeting() {
             initial={{ scale: 0, opacity: 0, y: 40 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-            className="fixed bottom-24 left-4 sm:left-6 z-40"
+            className="fixed bottom-20 left-3 sm:bottom-24 sm:left-6 z-40"
           >
             <motion.button
               whileHover={{ scale: 1.08, y: -3 }}

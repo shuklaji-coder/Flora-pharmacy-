@@ -65,14 +65,14 @@ export default function FloatingActions() {
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4 }}
-        className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-3 py-2 shadow-2xl"
+        className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-3 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] shadow-[0_-4px_25px_rgba(0,0,0,0.08)]"
       >
         <div className="grid grid-cols-3 gap-2">
           {/* Call Store CTA */}
           <motion.a
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.94 }}
             href={`tel:${BUSINESS_INFO.phoneRaw}`}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-bold transition"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 text-[11px] font-bold transition shadow-2xs"
           >
             <Phone className="w-4 h-4 text-flora-700 mb-0.5" />
             <span>Call Store</span>
@@ -80,14 +80,14 @@ export default function FloatingActions() {
 
           {/* Cart CTA */}
           <motion.button
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.94 }}
             onClick={() => setIsCartOpen(true)}
-            className="relative flex flex-col items-center justify-center py-2 px-1 rounded-xl bg-flora-50 text-flora-800 border border-flora-200 text-[11px] font-bold transition"
+            className="relative flex flex-col items-center justify-center py-2 px-1 rounded-xl bg-emerald-50 text-flora-900 border border-emerald-300 text-[11px] font-black transition shadow-2xs"
           >
             <div className="relative">
               <ShoppingBag className="w-4 h-4 text-flora-700 mb-0.5" />
               {cartCount > 0 && (
-                <span className="absolute -top-1.5 -right-2.5 w-3.5 h-3.5 rounded-full bg-wa text-slate-950 font-black text-[9px] flex items-center justify-center">
+                <span className="absolute -top-1.5 -right-2.5 w-4 h-4 rounded-full bg-wa text-slate-950 font-black text-[9px] flex items-center justify-center shadow-xs">
                   {cartCount}
                 </span>
               )}
@@ -97,11 +97,11 @@ export default function FloatingActions() {
 
           {/* WhatsApp CTA */}
           <motion.a
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.94 }}
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="shimmer-button flex flex-col items-center justify-center py-2 px-1 rounded-xl bg-wa hover:bg-wa-dark text-white text-[11px] font-bold transition shadow-xs"
+            className="shimmer-button flex flex-col items-center justify-center py-2 px-1 rounded-xl bg-wa hover:bg-wa-dark text-white text-[11px] font-black transition shadow-md shadow-wa/25"
           >
             <MessageCircle className="w-4 h-4 fill-current mb-0.5" />
             <span>WhatsApp</span>

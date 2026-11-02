@@ -341,7 +341,10 @@ export default function WellnessProductSection() {
           </div>
 
           {/* Quick-Switch Filter Chips */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar pt-1 border-t border-slate-100">
+          <div 
+            className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar pt-1 border-t border-slate-100 touch-pan-x"
+            style={{ WebkitOverflowScrolling: 'touch' }}
+          >
             {subCategoriesList.map((cat) => {
               const isActive = selectedCategory === cat.value;
               return (
@@ -351,7 +354,7 @@ export default function WellnessProductSection() {
                     setSelectedCategory(cat.value);
                     setSearchQuery("");
                   }}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all active:scale-95 ${
                     isActive
                       ? 'bg-flora-700 text-white shadow-2xs'
                       : 'bg-slate-100/80 hover:bg-slate-200 text-slate-700 hover:text-flora-800'
@@ -478,7 +481,7 @@ export default function WellnessProductSection() {
           </div>
         ) : (
           /* CLASSIC GRID VIEW */
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-5">
             {sortedProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

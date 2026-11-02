@@ -189,7 +189,9 @@ export default function WellnessBanners() {
       <div 
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
-        className="relative w-full aspect-[16/9] max-h-[660px] xl:max-h-[720px] min-h-[220px] sm:min-h-[340px] md:min-h-[440px] lg:min-h-[520px] xl:min-h-[580px] rounded-3xl sm:rounded-[2rem] overflow-hidden shadow-2xl border border-slate-200/60 bg-slate-950"
+        onTouchStart={() => setIsPaused(true)}
+        onTouchEnd={() => setIsPaused(false)}
+        className="relative w-full aspect-[16/9] max-h-[660px] xl:max-h-[720px] min-h-[190px] sm:min-h-[340px] md:min-h-[440px] lg:min-h-[520px] xl:min-h-[580px] rounded-2xl sm:rounded-[2rem] overflow-hidden shadow-2xl border border-slate-200/60 bg-slate-950 touch-pan-y"
       >
         {/* Animated Top Progress Bar */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-white/20 z-30 overflow-hidden pointer-events-none">
@@ -232,24 +234,24 @@ export default function WellnessBanners() {
               />
 
               {/* Subtle gradient vignette at bottom */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
 
               {/* Floating Quick Shop Pill */}
-              <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-8 lg:bottom-8 lg:right-10 z-10 flex items-center gap-2 sm:gap-3 px-4 py-2 sm:px-6 sm:py-3 rounded-2xl bg-slate-950/90 hover:bg-black text-white text-xs sm:text-sm font-black backdrop-blur-md border border-white/25 shadow-2xl group-hover:scale-105 transition-all">
+              <div className="absolute bottom-3 right-3 sm:bottom-6 sm:right-8 lg:bottom-8 lg:right-10 z-10 flex items-center gap-1.5 sm:gap-3 px-3 py-1.5 sm:px-6 sm:py-3 rounded-xl sm:rounded-2xl bg-slate-950/90 hover:bg-black text-white text-[11px] sm:text-sm font-black backdrop-blur-md border border-white/25 shadow-2xl group-hover:scale-105 transition-all">
                 <span>{current.buttonLabel || current.cta || "Shop Now"}</span>
-                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400 group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
           </motion.div>
         </AnimatePresence>
 
-        {/* Carousel Prev/Next Buttons */}
+        {/* Carousel Prev/Next Buttons (Visible on desktop/tablet, hidden on mobile for clean touch gestures) */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             handlePrev();
           }}
-          className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/45 hover:bg-black/80 text-white flex items-center justify-center backdrop-blur-md transition shadow-xl z-20 border border-white/20 hover:scale-110 active:scale-95"
+          className="hidden sm:flex absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/45 hover:bg-black/80 text-white items-center justify-center backdrop-blur-md transition shadow-xl z-20 border border-white/20 hover:scale-110 active:scale-95"
           aria-label="Previous Slide"
         >
           <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -259,14 +261,14 @@ export default function WellnessBanners() {
             e.stopPropagation();
             handleNext();
           }}
-          className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/45 hover:bg-black/80 text-white flex items-center justify-center backdrop-blur-md transition shadow-xl z-20 border border-white/20 hover:scale-110 active:scale-95"
+          className="hidden sm:flex absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/45 hover:bg-black/80 text-white items-center justify-center backdrop-blur-md transition shadow-xl z-20 border border-white/20 hover:scale-110 active:scale-95"
           aria-label="Next Slide"
         >
           <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
 
         {/* Carousel Dots / Pill Indicators */}
-        <div className="absolute bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20 bg-black/40 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15">
+        <div className="absolute bottom-2.5 sm:bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 sm:gap-2 z-20 bg-black/45 backdrop-blur-md px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full border border-white/15">
           {banners.map((b, i) => (
             <button
               key={b.id}
@@ -274,8 +276,8 @@ export default function WellnessBanners() {
                 e.stopPropagation();
                 handleDotClick(i);
               }}
-              className={`h-2 sm:h-2.5 rounded-full transition-all duration-300 shadow-xs ${
-                i === currentSlide ? 'w-8 sm:w-10 bg-emerald-400 shadow-glow' : 'w-2 sm:w-2.5 bg-white/50 hover:bg-white'
+              className={`h-1.5 sm:h-2.5 rounded-full transition-all duration-300 shadow-xs ${
+                i === currentSlide ? 'w-5 sm:w-10 bg-emerald-400 shadow-glow' : 'w-1.5 sm:w-2.5 bg-white/50 hover:bg-white'
               }`}
               aria-label={`Go to slide ${i + 1}`}
             />
@@ -285,45 +287,45 @@ export default function WellnessBanners() {
       </div>
 
       {/* 2. 4-PILLAR VALUE PROPS TICKER (Tata 1mg / Wellness Forever Style) */}
-      <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
+      <div className="mt-3 sm:mt-4 grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
         
-        <div className="p-3 sm:p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-flora-800 flex items-center justify-center shrink-0 border border-emerald-100">
-            <Zap className="w-5 h-5 text-emerald-600" />
+        <div className="p-2.5 sm:p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-center gap-2.5 sm:gap-3">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-50 text-flora-800 flex items-center justify-center shrink-0 border border-emerald-100">
+            <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
           </div>
-          <div>
-            <h4 className="text-xs font-black text-slate-900 leading-tight">30-Min Express</h4>
-            <p className="text-[11px] text-slate-500">Borivali East & Magathane</p>
-          </div>
-        </div>
-
-        <div className="p-3 sm:p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-800 flex items-center justify-center shrink-0 border border-blue-100">
-            <ShieldCheck className="w-5 h-5 text-blue-600" />
-          </div>
-          <div>
-            <h4 className="text-xs font-black text-slate-900 leading-tight">100% Genuine</h4>
-            <p className="text-[11px] text-slate-500">Direct licensed distributor</p>
+          <div className="min-w-0">
+            <h4 className="text-[11px] sm:text-xs font-black text-slate-900 leading-tight truncate">30-Min Express</h4>
+            <p className="text-[9.5px] sm:text-[11px] text-slate-500 truncate">Borivali & Magathane</p>
           </div>
         </div>
 
-        <div className="p-3 sm:p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-800 flex items-center justify-center shrink-0 border border-purple-100">
-            <HeartHandshake className="w-5 h-5 text-purple-600" />
+        <div className="p-2.5 sm:p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-center gap-2.5 sm:gap-3">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 text-blue-800 flex items-center justify-center shrink-0 border border-blue-100">
+            <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
           </div>
-          <div>
-            <h4 className="text-xs font-black text-slate-900 leading-tight">D.Pharm Guidance</h4>
-            <p className="text-[11px] text-slate-500">Free dose consultation</p>
+          <div className="min-w-0">
+            <h4 className="text-[11px] sm:text-xs font-black text-slate-900 leading-tight truncate">100% Genuine</h4>
+            <p className="text-[9.5px] sm:text-[11px] text-slate-500 truncate">Licensed distributor</p>
           </div>
         </div>
 
-        <div className="p-3 sm:p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 border border-amber-100">
-            <Tag className="w-5 h-5 text-amber-600" />
+        <div className="p-2.5 sm:p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-center gap-2.5 sm:gap-3">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-purple-50 text-purple-800 flex items-center justify-center shrink-0 border border-purple-100">
+            <HeartHandshake className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
           </div>
-          <div>
-            <h4 className="text-xs font-black text-slate-900 leading-tight">Best Local Prices</h4>
-            <p className="text-[11px] text-slate-500">Up to 25% off daily meds</p>
+          <div className="min-w-0">
+            <h4 className="text-[11px] sm:text-xs font-black text-slate-900 leading-tight truncate">D.Pharm Guidance</h4>
+            <p className="text-[9.5px] sm:text-[11px] text-slate-500 truncate">Free dose consultation</p>
+          </div>
+        </div>
+
+        <div className="p-2.5 sm:p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-center gap-2.5 sm:gap-3">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 border border-amber-100">
+            <Tag className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600" />
+          </div>
+          <div className="min-w-0">
+            <h4 className="text-[11px] sm:text-xs font-black text-slate-900 leading-tight truncate">Best Local Prices</h4>
+            <p className="text-[9.5px] sm:text-[11px] text-slate-500 truncate">Up to 25% off daily</p>
           </div>
         </div>
 

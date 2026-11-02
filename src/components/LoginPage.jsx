@@ -117,7 +117,7 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-4xl rounded-3xl sm:rounded-[36px] shadow-[0_25px_80px_rgba(2,35,23,0.55),0_0_35px_rgba(223,192,158,0.2)] border-2 border-[#DFC09E]/70 overflow-hidden grid grid-cols-1 lg:grid-cols-12 animate-fade-in-up">
         
         {/* Left Column: Royal Emerald Gradient with Champagne Accents & Mascot (Desktop lg:col-span-5) */}
-        <div className="lg:col-span-5 bg-gradient-to-br from-[#033323] via-[#064E36] to-[#022418] p-6 sm:p-7 text-white flex flex-col justify-between relative overflow-hidden border-b lg:border-b-0 lg:border-r border-[#DFC09E]/30">
+        <div className="hidden lg:flex lg:col-span-5 bg-gradient-to-br from-[#033323] via-[#064E36] to-[#022418] p-6 sm:p-7 text-white flex-col justify-between relative overflow-hidden border-b lg:border-b-0 lg:border-r border-[#DFC09E]/30">
           
           {/* Subtle Golden Pattern */}
           <div 
@@ -270,43 +270,57 @@ export default function LoginPage() {
           
           <div>
             
-            {/* Mobile Mascot Welcome Strip with Left-to-Right Slide */}
-            <motion.div 
-              key={`mobile-mascot-${authMode}-${mascotKey}`}
-              initial={{ x: -160, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ type: 'spring', stiffness: 85, damping: 14, delay: 0.15 }}
-              onClick={() => setMascotKey(k => k + 1)}
-              className="lg:hidden flex items-center gap-3 p-3 bg-gradient-to-r from-[#F5EBE0] via-[#FAF4EA] to-[#F5EBE0] rounded-2xl border-2 border-[#DFC09E]/60 mb-4 shadow-2xs overflow-hidden cursor-pointer"
-            >
-              <motion.div 
-                initial={{ x: -40, rotate: -15 }}
-                animate={{ x: 0, rotate: 0 }}
-                transition={{ type: 'spring', stiffness: 90, damping: 12, delay: 0.25 }}
-                className="w-14 h-14 rounded-xl bg-white p-1 border border-[#DFC09E] shadow-2xs shrink-0 flex items-center justify-center"
-              >
-                <img 
-                  src="/images/flora-mascot-key.png" 
-                  alt="Flora Mascot with Key" 
-                  className="w-full h-full object-contain"
-                />
-              </motion.div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-black text-[#043E2B]">
-                    {authMode === 'login' ? "Welcome Back!" : "Create New Account"}
-                  </span>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#DFC09E]/40 text-[#043E2B] font-black border border-[#DFC09E]/60">
-                    🔑 Flora Key
-                  </span>
+            {/* Mobile Brand & Mascot Welcome Strip */}
+            <div className="lg:hidden mb-4 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#10B981] to-[#043E2B] flex items-center justify-center p-1.5 shadow-md border border-[#DFC09E]/40">
+                    <HeartPulse className="w-full h-full text-[#F5E9D8]" />
+                  </div>
+                  <div>
+                    <h2 className="font-heading font-black text-base text-[#043E2B] leading-none">
+                      Flora Pharmacy
+                    </h2>
+                    <span className="text-[10px] text-[#6D5533] font-semibold">Borivali East • 30-Min Delivery</span>
+                  </div>
                 </div>
-                <p className="text-[11px] text-[#6D5533] truncate mt-0.5">
-                  {authMode === 'login' 
-                    ? "Sign in to unlock 30-min express medicine delivery" 
-                    : "Register to get verified medicine batches"}
-                </p>
+                <span className="text-[10px] font-black uppercase text-[#045238] bg-[#EAE0D0] px-2 py-0.5 rounded-full border border-[#DFC09E]">
+                  ⚡ 30m Express
+                </span>
               </div>
-            </motion.div>
+
+              <motion.div 
+                key={`mobile-mascot-${authMode}-${mascotKey}`}
+                initial={{ x: -80, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 85, damping: 14, delay: 0.15 }}
+                onClick={() => setMascotKey(k => k + 1)}
+                className="flex items-center gap-3 p-2.5 bg-gradient-to-r from-[#F5EBE0] via-[#FAF4EA] to-[#F5EBE0] rounded-2xl border-2 border-[#DFC09E]/60 shadow-2xs overflow-hidden cursor-pointer"
+              >
+                <div className="w-12 h-12 rounded-xl bg-white p-1 border border-[#DFC09E] shadow-2xs shrink-0 flex items-center justify-center">
+                  <img 
+                    src="/images/flora-mascot-key.png" 
+                    alt="Flora Mascot with Key" 
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-black text-[#043E2B]">
+                      {authMode === 'login' ? "Welcome Back!" : "New Patient Registration"}
+                    </span>
+                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#DFC09E]/50 text-[#043E2B] font-black">
+                      🔑 Flora Buddy
+                    </span>
+                  </div>
+                  <p className="text-[10.5px] text-[#6D5533] truncate mt-0.5">
+                    {authMode === 'login' 
+                      ? "Sign in for 30-min doorstep medicine delivery" 
+                      : "Register to get verified medicine batches"}
+                  </p>
+                </div>
+              </motion.div>
+            </div>
 
             {/* TAB SWITCHER: LOGIN vs SIGN UP (EMERALD & CHAMPAGNE) */}
             <div className="bg-[#EFE5D8] p-1.5 rounded-2xl flex items-center mb-5 border border-[#DFC09E]/60 shadow-inner">

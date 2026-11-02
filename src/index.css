@@ -10,6 +10,22 @@
     -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  body {
+    overflow-x: hidden;
+    width: 100%;
+    min-width: 320px;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+
+  /* Prevent 300ms tap delay on mobile buttons and links */
+  button, a, input, select, textarea {
+    touch-action: manipulation;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -175,6 +191,7 @@
   perspective: 1000px;
   -webkit-perspective: 1000px;
   contain: layout paint;
+  touch-action: pan-y;
 }
 
 .animate-marquee-continuous {

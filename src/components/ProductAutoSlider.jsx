@@ -23,7 +23,7 @@ function ProductAutoSliderComponent({
   variant = "normal", // "normal", "slow", "flash", "catalog"
   direction = "left", // "left" or "right"
   hideHeader = false,
-  cardWidth = "w-64 sm:w-72",
+  cardWidth = "w-[230px] sm:w-72",
   speedSeconds = null
 }) {
   const { setSelectedCategory, setSearchQuery } = useStore();
@@ -63,7 +63,7 @@ function ProductAutoSliderComponent({
 
   const handleManualScroll = (direction) => {
     if (containerRef.current) {
-      const step = 320;
+      const step = 280;
       const scrollAmount = direction === 'left' ? -step : step;
       containerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
@@ -79,34 +79,34 @@ function ProductAutoSliderComponent({
   if (!products || products.length === 0) return null;
 
   return (
-    <section className="space-y-4 relative select-none">
+    <section className="space-y-3 sm:space-y-4 relative select-none">
       
       {/* Header Row with Badge, Title, Controls */}
       {!hideHeader && (
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-slate-200/80 pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 sm:gap-3 border-b border-slate-200/80 pb-3">
           <div>
             {badge && (
-              <div className={`inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border mb-1 ${badgeColor}`}>
+              <div className={`inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border mb-1 ${badgeColor}`}>
                 <BadgeIcon className="w-3.5 h-3.5 fill-current" />
                 <span>{badge}</span>
               </div>
             )}
-            <h3 className="font-heading font-black text-slate-900 text-xl sm:text-2xl tracking-tight">
+            <h3 className="font-heading font-black text-slate-900 text-lg sm:text-2xl tracking-tight">
               {title}
             </h3>
             {subtitle && (
-              <p className="text-xs text-slate-500 font-medium mt-0.5">
+              <p className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">
                 {subtitle}
               </p>
             )}
           </div>
 
           {/* Controls: Continuous Slide Status Indicator + Navigation Arrows + View All */}
-          <div className="flex items-center gap-2 self-start sm:self-auto">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 self-start sm:self-auto">
             {/* Speed Toggle Pill */}
             <button
               onClick={() => setSpeedLevel(speedLevel === "slow" ? "medium" : "slow")}
-              className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer"
+              className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer"
               title="Click to toggle slide speed"
             >
               <span>{speedLevel === "slow" ? "🌿 Smooth" : "⚡ Fast"}</span>
@@ -115,8 +115,8 @@ function ProductAutoSliderComponent({
             {/* Live Continuous Scroll Status Indicator */}
             <div 
               onClick={() => setIsManuallyPaused(!isManuallyPaused)}
-              className="inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition cursor-pointer mr-1"
-              title="Click to pause or hover anywhere on cards"
+              className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition cursor-pointer"
+              title="Click to pause or hover/touch anywhere on cards"
             >
               {isManuallyPaused ? (
                 <>
@@ -126,24 +126,24 @@ function ProductAutoSliderComponent({
               ) : (
                 <>
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                  <span className="text-emerald-800">Non-Stop Slide</span>
+                  <span className="text-emerald-800">Auto Slide</span>
                 </>
               )}
             </div>
 
-            {/* Left Arrow Button */}
+            {/* Left Arrow Button (Desktop/Tablet) */}
             <button
               onClick={() => handleManualScroll('left')}
-              className="w-9 h-9 rounded-full bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 flex items-center justify-center transition shadow-2xs active:scale-95"
+              className="hidden sm:flex w-9 h-9 rounded-full bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 items-center justify-center transition shadow-2xs active:scale-95"
               aria-label="Slide previous products"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
 
-            {/* Right Arrow Button */}
+            {/* Right Arrow Button (Desktop/Tablet) */}
             <button
               onClick={() => handleManualScroll('right')}
-              className="w-9 h-9 rounded-full bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 flex items-center justify-center transition shadow-2xs active:scale-95"
+              className="hidden sm:flex w-9 h-9 rounded-full bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 items-center justify-center transition shadow-2xs active:scale-95"
               aria-label="Slide next products"
             >
               <ChevronRight className="w-5 h-5" />
@@ -152,7 +152,7 @@ function ProductAutoSliderComponent({
             {/* View All Button */}
             <button
               onClick={handleViewAll}
-              className="inline-flex items-center gap-1 px-3.5 py-2 rounded-2xl bg-flora-50 hover:bg-flora-100 text-flora-800 text-xs font-black transition border border-emerald-200 ml-1 shadow-2xs"
+              className="inline-flex items-center gap-1 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl sm:rounded-2xl bg-flora-50 hover:bg-flora-100 text-flora-800 text-[11px] sm:text-xs font-black transition border border-emerald-200 shadow-2xs"
             >
               <span>View All</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -161,18 +161,20 @@ function ProductAutoSliderComponent({
         </div>
       )}
 
-      {/* Marquee Wrapper with Pause-on-Hover and Edge Gradient Fades */}
+      {/* Marquee Wrapper with Pause-on-Hover / Pause-on-Touch and Edge Gradient Fades */}
       <div 
         ref={containerRef}
-        className="relative overflow-x-hidden overflow-y-visible py-2 marquee-pause-on-hover"
+        onTouchStart={() => setIsManuallyPaused(true)}
+        onTouchEnd={() => setIsManuallyPaused(false)}
+        className="relative overflow-x-hidden overflow-y-visible py-2 marquee-pause-on-hover touch-pan-y"
       >
         {/* Left & Right Subtle Soft Edge Fade Masks */}
-        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-14 bg-gradient-to-r from-surface-light via-surface-light/80 to-transparent z-10" />
-        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-14 bg-gradient-to-l from-surface-light via-surface-light/80 to-transparent z-10" />
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-6 sm:w-14 bg-gradient-to-r from-surface-light via-surface-light/80 to-transparent z-10" />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-6 sm:w-14 bg-gradient-to-l from-surface-light via-surface-light/80 to-transparent z-10" />
 
         {/* Continuous Smooth Infinite Marquee Track */}
         <div 
-          className={`flex items-stretch gap-4 sm:gap-5 ${animationClass}`}
+          className={`flex items-stretch gap-3 sm:gap-5 ${animationClass}`}
           style={{
             animationPlayState: isManuallyPaused ? 'paused' : 'running',
             ...(calculatedDuration ? { animationDuration: calculatedDuration } : {})

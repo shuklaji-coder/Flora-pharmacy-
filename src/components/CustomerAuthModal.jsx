@@ -125,7 +125,7 @@ export default function CustomerAuthModal() {
     : [];
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 overflow-y-auto p-0 sm:p-6 flex items-end sm:items-center justify-center">
       {/* Backdrop with Emerald Tint */}
       <div 
         className="fixed inset-0 bg-[#022317]/75 backdrop-blur-xs transition-opacity animate-fade-in"
@@ -135,19 +135,19 @@ export default function CustomerAuthModal() {
         }}
       />
 
-      <div className="relative bg-gradient-to-b from-[#FCFBF7] via-[#FAF5EC] to-[#F3ECE0] rounded-3xl sm:rounded-[32px] max-w-md w-full shadow-[0_25px_70px_rgba(2,35,23,0.55)] border-2 border-[#DFC09E] overflow-hidden z-10 animate-fade-in-up">
+      <div className="relative bg-gradient-to-b from-[#FCFBF7] via-[#FAF5EC] to-[#F3ECE0] rounded-t-3xl sm:rounded-[32px] max-w-md w-full shadow-[0_25px_70px_rgba(2,35,23,0.55)] border-2 border-[#DFC09E] overflow-hidden z-10 animate-fade-in-up max-h-[92vh] sm:max-h-[88vh] flex flex-col">
         
         {/* Header */}
-        <div className="p-4 sm:p-5 bg-gradient-to-r from-[#033323] via-[#064E36] to-[#043E2B] text-white border-b border-[#DFC09E]/30 flex items-center justify-between">
+        <div className="p-4 sm:p-5 bg-gradient-to-r from-[#033323] via-[#064E36] to-[#043E2B] text-white border-b border-[#DFC09E]/30 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             {currentUser?.photoURL ? (
               <img 
                 src={currentUser.photoURL} 
                 alt={currentUser.name} 
-                className="w-11 h-11 rounded-2xl object-cover border-2 border-[#DFC09E] shadow-xs" 
+                className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl object-cover border-2 border-[#DFC09E] shadow-xs" 
               />
             ) : (
-              <div className="w-11 h-11 rounded-2xl bg-[#FAF4EA] p-1 border-2 border-[#DFC09E] shadow-2xs flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#FAF4EA] p-1 border-2 border-[#DFC09E] shadow-2xs flex items-center justify-center shrink-0">
                 <img 
                   src="/images/flora-mascot-key.png" 
                   alt="Flora Mascot" 
@@ -159,7 +159,7 @@ export default function CustomerAuthModal() {
               <h3 className="font-heading font-black text-[#FFFDF9] text-sm sm:text-base leading-tight">
                 {currentUser ? "My Customer Account" : (authMode === 'login' ? "Customer Sign In" : "Create New Account")}
               </h3>
-              <p className="text-[11px] text-[#EED9C4] font-medium">
+              <p className="text-[10px] sm:text-[11px] text-[#EED9C4] font-medium">
                 Flora Pharmacy • Borivali East
               </p>
             </div>
@@ -177,7 +177,7 @@ export default function CustomerAuthModal() {
         </div>
 
         {/* Modal Body */}
-        <div className="p-4 sm:p-6 space-y-4 max-h-[78vh] overflow-y-auto">
+        <div className="p-4 sm:p-6 space-y-4 overflow-y-auto custom-scrollbar flex-1 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))]">
           
           {currentUser ? (
             /* Logged in state */

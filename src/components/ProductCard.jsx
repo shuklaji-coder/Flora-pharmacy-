@@ -72,10 +72,10 @@ function ProductCardComponent({ product }) {
       </div>
 
       {/* Product Packshot Showcase (Clean White & Soft Studio Vignette) */}
-      <div className="relative h-44 sm:h-50 w-full bg-gradient-to-b from-slate-50/70 via-white to-emerald-50/15 overflow-hidden border-b border-slate-100 flex items-center justify-center p-4">
+      <div className="relative h-40 sm:h-50 w-full bg-gradient-to-b from-slate-50/70 via-white to-emerald-50/15 overflow-hidden border-b border-slate-100 flex items-center justify-center p-3 sm:p-4">
         
         {/* Soft Pedestal Shadow */}
-        <div className="absolute bottom-3 w-32 h-2.5 bg-slate-400/15 rounded-full blur-xs pointer-events-none" />
+        <div className="absolute bottom-3 w-28 sm:w-32 h-2.5 bg-slate-400/15 rounded-full blur-xs pointer-events-none" />
         
         <div className="w-full h-full transform group-hover:scale-108 transition-transform duration-500 ease-out flex items-center justify-center">
           <ProductPackshot product={product} />
@@ -86,10 +86,10 @@ function ProductCardComponent({ product }) {
           {product.requiresPrescription ? (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-black bg-rose-50 text-rose-700 border border-rose-200/80 shadow-2xs">
               <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
-              <span>Rx Required</span>
+              <span>Rx</span>
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200/80 shadow-2xs">
+            <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-md text-[8.5px] sm:text-[9px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200/80 shadow-2xs">
               <ShieldCheck className="w-2.5 h-2.5 text-emerald-600" />
               <span>100% Genuine</span>
             </span>
@@ -98,16 +98,16 @@ function ProductCardComponent({ product }) {
       </div>
 
       {/* Product Content & Details Area */}
-      <div className="p-3.5 sm:p-4 flex-1 flex flex-col justify-between space-y-3">
+      <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between space-y-2.5 sm:space-y-3">
         <div>
           {/* Brand Tagline & Customer Rating Row */}
-          <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-            <span className="text-flora-800 font-extrabold truncate max-w-[130px]">
+          <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+            <span className="text-flora-800 font-extrabold truncate max-w-[110px] sm:max-w-[130px]">
               {product.brandInfo || "Flora Certified"}
             </span>
             <span className="text-amber-500 flex items-center gap-1 shrink-0 bg-amber-50/90 px-1.5 py-0.5 rounded-md border border-amber-200/60">
               <Star className="w-3 h-3 fill-current text-amber-500" />
-              <span className="font-black text-[10px] text-amber-900">{product.rating || "4.8"}</span>
+              <span className="font-black text-[9.5px] sm:text-[10px] text-amber-900">{product.rating || "4.8"}</span>
             </span>
           </div>
 
@@ -117,9 +117,9 @@ function ProductCardComponent({ product }) {
           </h4>
 
           {/* Form Factor & Fresh Stock Tag */}
-          <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium mt-1.5">
-            <span className="truncate max-w-[135px] text-slate-600">{product.form || "Standard Pack"}</span>
-            <span className="text-emerald-700 font-bold flex items-center gap-1 text-[10px] shrink-0">
+          <div className="flex items-center justify-between text-[10.5px] sm:text-[11px] text-slate-500 font-medium mt-1">
+            <span className="truncate max-w-[110px] sm:max-w-[135px] text-slate-600">{product.form || "Standard Pack"}</span>
+            <span className="text-emerald-700 font-bold flex items-center gap-1 text-[9.5px] sm:text-[10px] shrink-0">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>In-Stock</span>
             </span>
@@ -127,61 +127,61 @@ function ProductCardComponent({ product }) {
         </div>
 
         {/* Pricing, Savings & Action Row */}
-        <div className="pt-2.5 border-t border-slate-100 space-y-2">
+        <div className="pt-2 sm:pt-2.5 border-t border-slate-100 space-y-2">
           
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2">
             {/* Price with Strike-through & Savings */}
             <div>
-              <div className="flex items-baseline gap-1.5 leading-none">
-                <span className="font-heading font-black text-base sm:text-lg text-slate-950">
+              <div className="flex items-baseline gap-1 sm:gap-1.5 leading-none">
+                <span className="font-heading font-black text-sm sm:text-base lg:text-lg text-slate-950">
                   ₹{product.price}
                 </span>
                 {product.mrp && product.mrp > product.price && (
-                  <span className="text-xs text-slate-400 line-through font-semibold">
+                  <span className="text-[11px] sm:text-xs text-slate-400 line-through font-semibold">
                     ₹{product.mrp}
                   </span>
                 )}
               </div>
               {discountAmount > 0 ? (
-                <span className="text-[10px] text-emerald-800 font-black bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/60 block mt-1 w-fit">
+                <span className="text-[9px] sm:text-[10px] text-emerald-800 font-black bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200/60 block mt-0.5 sm:mt-1 w-fit">
                   Save ₹{discountAmount}
                 </span>
               ) : (
-                <span className="text-[10px] text-slate-400 font-medium block mt-1">
-                  Inclusive of all taxes
+                <span className="text-[9px] sm:text-[10px] text-slate-400 font-medium block mt-0.5 sm:mt-1">
+                  Incl. taxes
                 </span>
               )}
             </div>
 
             {/* Interactive Actions: ADD Button vs [-] qty [+] Selector + WhatsApp */}
-            <div className="flex items-center gap-1.5 shrink-0">
+            <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
               {quantity === 0 ? (
                 <button
                   onClick={() => addToCart(product, 1)}
-                  className="shimmer-button px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl font-heading font-black text-xs bg-gradient-to-r from-flora-700 to-flora-800 hover:from-flora-800 hover:to-flora-950 text-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 flex items-center gap-1.5 cursor-pointer"
+                  className="shimmer-button px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-xl sm:rounded-2xl font-heading font-black text-xs bg-gradient-to-r from-flora-700 to-flora-800 hover:from-flora-800 hover:to-flora-950 text-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 flex items-center gap-1 cursor-pointer"
                   aria-label={`Add ${product.name} to Cart`}
                 >
                   <Plus className="w-3.5 h-3.5 stroke-[3]" />
                   <span>ADD</span>
                 </button>
               ) : (
-                <div className="flex items-center bg-flora-800 text-white rounded-2xl shadow-md overflow-hidden border border-emerald-500">
+                <div className="flex items-center bg-flora-800 text-white rounded-xl sm:rounded-2xl shadow-md overflow-hidden border border-emerald-500">
                   <button
                     onClick={() => updateCartQuantity(product.id, quantity - 1)}
-                    className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-flora-900 active:bg-black transition cursor-pointer"
+                    className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-flora-900 active:bg-black transition cursor-pointer"
                     aria-label="Decrease quantity"
                   >
-                    <Minus className="w-3.5 h-3.5 stroke-[3]" />
+                    <Minus className="w-3 h-3 stroke-[3]" />
                   </button>
-                  <span className="w-6 sm:w-7 text-center font-heading font-black text-xs select-none">
+                  <span className="w-5 sm:w-7 text-center font-heading font-black text-xs select-none">
                     {quantity}
                   </span>
                   <button
                     onClick={() => updateCartQuantity(product.id, quantity + 1)}
-                    className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-flora-900 active:bg-black transition cursor-pointer"
+                    className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-flora-900 active:bg-black transition cursor-pointer"
                     aria-label="Increase quantity"
                   >
-                    <Plus className="w-3.5 h-3.5 stroke-[3]" />
+                    <Plus className="w-3 h-3 stroke-[3]" />
                   </button>
                 </div>
               )}
@@ -191,10 +191,10 @@ function ProductCardComponent({ product }) {
                 href={whatsappDirect}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-wa/10 hover:bg-wa text-wa-dark hover:text-white border border-wa/25 hover:border-wa flex items-center justify-center transition shadow-2xs cursor-pointer active:scale-95"
+                className="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-wa/10 hover:bg-wa text-wa-dark hover:text-white border border-wa/25 hover:border-wa flex items-center justify-center transition shadow-2xs cursor-pointer active:scale-95"
                 title="Order directly on WhatsApp"
               >
-                <MessageCircle className="w-4 h-4 fill-current" />
+                <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
               </a>
             </div>
           </div>

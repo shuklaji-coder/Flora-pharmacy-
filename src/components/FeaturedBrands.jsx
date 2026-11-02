@@ -243,17 +243,19 @@ function FeaturedBrandsComponent() {
 
         {/* Continuous Infinite Marquee Ribbon with Left & Right Fade Masks */}
         <div 
-          className="relative overflow-x-hidden py-2"
+          className="relative overflow-x-hidden py-2 touch-pan-y"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
         >
           {/* Subtle Edge Fade Gradients for natural entry/exit */}
-          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-6 sm:w-16 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-6 sm:w-16 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
 
           {/* Infinite Running Marquee Track */}
           <div 
-            className={`flex items-stretch gap-3 sm:gap-4 ${
+            className={`flex items-stretch gap-2.5 sm:gap-4 ${
               direction === "right" 
                 ? "animate-marquee-continuous-right" 
                 : "animate-marquee-continuous"
@@ -267,11 +269,11 @@ function FeaturedBrandsComponent() {
               <div
                 key={`${brand.id}-${idx}`}
                 onClick={() => handleBrandClick(brand.searchTerm)}
-                className={`group shrink-0 w-48 sm:w-56 bg-white rounded-3xl border border-slate-200/90 shadow-2xs hover:shadow-soft-lg p-3.5 flex flex-col justify-between transition-all duration-300 cursor-pointer ${brand.colorRing} hover:-translate-y-1 hover:scale-102`}
+                className={`group shrink-0 w-40 sm:w-56 bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-2xs hover:shadow-soft-lg p-2.5 sm:p-3.5 flex flex-col justify-between transition-all duration-300 cursor-pointer ${brand.colorRing} hover:-translate-y-1 hover:scale-102`}
               >
                 <div>
                   {/* Brand Logo Container with Clean White Background */}
-                  <div className="w-full h-24 sm:h-26 rounded-2xl bg-slate-50/80 border border-slate-100 flex items-center justify-center p-3 mb-3 group-hover:bg-white group-hover:scale-102 transition-all">
+                  <div className="w-full h-20 sm:h-26 rounded-xl sm:rounded-2xl bg-slate-50/80 border border-slate-100 flex items-center justify-center p-2 sm:p-3 mb-2 sm:mb-3 group-hover:bg-white group-hover:scale-102 transition-all">
                     <img
                       src={brand.logo}
                       alt={`${brand.name} official logo`}

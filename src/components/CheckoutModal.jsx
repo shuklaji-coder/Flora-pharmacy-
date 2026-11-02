@@ -89,7 +89,7 @@ export default function CheckoutModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 overflow-y-auto p-0 sm:p-6 flex items-end sm:items-center justify-center">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity animate-fade-in"
@@ -97,19 +97,19 @@ export default function CheckoutModal() {
       />
 
       {/* Modal Container */}
-      <div className="relative bg-white rounded-3xl max-w-xl w-full shadow-2xl border border-slate-200 overflow-hidden z-10 animate-fade-in-up">
+      <div className="relative bg-white rounded-t-3xl sm:rounded-3xl max-w-xl w-full shadow-2xl border border-slate-200 overflow-hidden z-10 animate-fade-in-up max-h-[92vh] sm:max-h-[88vh] flex flex-col">
         
         {/* Header */}
-        <div className="p-5 sm:p-6 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+        <div className="p-4 sm:p-6 bg-slate-50 border-b border-slate-100 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-flora-700 text-white flex items-center justify-center shadow-md shadow-flora-700/20">
+            <div className="w-10 h-10 rounded-2xl bg-flora-700 text-white flex items-center justify-center shadow-md shadow-flora-700/20 shrink-0">
               <Truck className="w-5 h-5" />
             </div>
             <div>
               <h3 className="font-heading font-black text-slate-900 text-base sm:text-lg">
                 Express Delivery Checkout
               </h3>
-              <p className="text-xs text-slate-500 font-medium">
+              <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
                 Delivering in 30-45 minutes across Borivali East
               </p>
             </div>
@@ -124,7 +124,7 @@ export default function CheckoutModal() {
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-5 sm:p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-5 overflow-y-auto custom-scrollbar flex-1 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))]">
           
           {/* STEP 1: Customer Contact Details */}
           <div className="space-y-3">

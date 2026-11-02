@@ -46,6 +46,7 @@ export default function Navbar() {
   const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchRef = useRef(null);
+  const mobileSearchRef = useRef(null);
 
   // Rotating search placeholders to engage users
   const searchPlaceholders = [
@@ -65,15 +66,21 @@ export default function Navbar() {
     return () => clearInterval(interval);
   }, [searchPlaceholders.length]);
 
-  // Click outside to close dropdowns
+  // Click / touch outside to close dropdowns
   useEffect(() => {
     function handleClickOutside(event) {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
+      const inDesktop = searchRef.current && searchRef.current.contains(event.target);
+      const inMobile = mobileSearchRef.current && mobileSearchRef.current.contains(event.target);
+      if (!inDesktop && !inMobile) {
         setIsSearchFocused(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
   }, []);
 
   const localities = [
@@ -166,17 +173,19 @@ export default function Navbar() {
 
       {/* 2. MAIN WELLNESS STICKY HEADER */}
       <header className="sticky top-0 z-40 bg-white/98 backdrop-blur-md border-b border-slate-200/90 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5">
-          <div className="flex items-center justify-between gap-3 md:gap-5">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-2.5">
+          
+          {/* Top Row: Logo, Locality Pill, Actions */}
+          <div className="flex items-center justify-between gap-2 sm:gap-4 md:gap-5">
             
             {/* Logo */}
-            <div className="shrink-0 flex items-center gap-3">
+            <div className="shrink-0 flex items-center gap-2">
               <a href="#home" className="focus:outline-none group">
                 <Logo />
               </a>
             </div>
 
-            {/* Location Selector (Deliver to Pill) */}
+            {/* Desktop Location Selector (Deliver to Pill) */}
             <div className="relative hidden lg:block shrink-0">
               <button
                 type="button"
@@ -198,7 +207,7 @@ export default function Navbar() {
                 </div>
               </button>
 
-              {/* Locality Dropdown list */}
+              {/* Desktop Locality Dropdown list */}
               {isLocationDropdownOpen && (
                 <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-3xl shadow-2xl border border-slate-200 p-2.5 z-50 animate-scale-in">
                   <div className="p-2.5 border-b border-slate-100 mb-1">
@@ -233,8 +242,8 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Central Predictive Medicine Search Bar */}
-            <div className="flex-1 max-w-2xl relative" ref={searchRef}>
+            {/* Desktop Central Predictive Medicine Search Bar */}
+            <div className="hidden lg:block flex-1 max-w-2xl relative" ref={searchRef}>
               <div className="relative flex items-center">
                 <Search className="w-4 h-4 text-emerald-600 absolute left-3.5 pointer-events-none" />
                 <input
@@ -259,7 +268,7 @@ export default function Navbar() {
                 )}
               </div>
 
-              {/* Instant Search Predictive Dropdown */}
+              {/* Instant Search Predictive Dropdown (Desktop) */}
               {isSearchFocused && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden z-50 animate-scale-in">
                   
@@ -394,6 +403,25 @@ export default function Navbar() {
             {/* Header Right Actions */}
             <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               
+              {/* Mobile Delivery Locality Tap-Button */}
+              <button
+                type="button"
+                onClick={() => setIsLocationDropdownOpen(true)}
+                className="lg:hidden flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-left transition active:scale-95 shadow-2xs"
+                title="Select delivery locality in Borivali"
+              >
+                <div className="w-6 h-6 rounded-lg bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-2xs">
+                  <MapPin className="w-3.5 h-3.5" />
+                </div>
+                <div className="flex flex-col leading-none">
+                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Deliver To</span>
+                  <span className="text-[11px] font-black text-slate-800 truncate max-w-[80px] sm:max-w-[120px] mt-0.5">
+                    {selectedLocation.split(",")[0]}
+                  </span>
+                </div>
+                <ChevronDown className="w-3 h-3 text-slate-400 shrink-0" />
+              </button>
+
               {/* Customer Account Button */}
               <button
                 onClick={() => {
@@ -403,7 +431,7 @@ export default function Navbar() {
                     setIsAuthModalOpen(true);
                   }
                 }}
-                className={`flex items-center gap-1.5 p-2 sm:px-3 sm:py-2.5 rounded-2xl text-xs font-bold transition ${
+                className={`flex items-center gap-1.5 p-1.5 sm:px-3 sm:py-2.5 rounded-2xl text-xs font-bold transition ${
                   !currentUser
                     ? 'bg-flora-50 text-flora-900 border border-emerald-300 hover:bg-flora-100 shadow-2xs'
                     : 'text-slate-700 hover:bg-slate-100 border border-transparent hover:border-slate-200'
@@ -414,13 +442,13 @@ export default function Navbar() {
                   <img 
                     src={currentUser.photoURL} 
                     alt={currentUser.name} 
-                    className="w-8 h-8 rounded-xl object-cover border-2 border-emerald-500 shadow-2xs" 
+                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl object-cover border-2 border-emerald-500 shadow-2xs" 
                   />
                 ) : (
-                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                  <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center ${
                     !currentUser ? 'bg-flora-600 text-white' : 'bg-slate-100 text-slate-700'
                   }`}>
-                    <User className="w-4 h-4" />
+                    <User className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </div>
                 )}
                 <div className="hidden md:flex flex-col text-left leading-none">
@@ -436,7 +464,7 @@ export default function Navbar() {
               {/* Cart Button with Live Count & Price Badge */}
               <button
                 onClick={() => setIsCartOpen(true)}
-                className="shimmer-button flex items-center gap-2 sm:gap-2.5 px-3.5 sm:px-4 py-2.5 rounded-2xl bg-gradient-to-r from-flora-700 via-flora-800 to-flora-900 hover:from-flora-800 hover:to-flora-950 text-white font-heading font-black text-xs sm:text-sm shadow-md transition active:scale-95"
+                className="shimmer-button flex items-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl bg-gradient-to-r from-flora-700 via-flora-800 to-flora-900 hover:from-flora-800 hover:to-flora-950 text-white font-heading font-black text-xs sm:text-sm shadow-md transition active:scale-95"
                 aria-label="View Shopping Cart"
               >
                 <div className="relative flex items-center justify-center">
@@ -456,10 +484,207 @@ export default function Navbar() {
             </div>
 
           </div>
+
+          {/* MOBILE FULL-WIDTH PREDICTIVE MEDICINE SEARCH BAR */}
+          <div className="lg:hidden mt-2 relative" ref={mobileSearchRef}>
+            <div className="relative flex items-center">
+              <Search className="w-4 h-4 text-emerald-600 absolute left-3.5 pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setIsSearchFocused(true)}
+                placeholder={searchPlaceholders[placeholderIndex]}
+                className="w-full pl-10 pr-9 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-flora-600 focus:border-flora-600 transition shadow-inner font-medium"
+              />
+              {searchQuery ? (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 p-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              ) : null}
+            </div>
+
+            {/* Instant Search Predictive Dropdown (Mobile) */}
+            {isSearchFocused && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden z-50 animate-scale-in max-h-[70vh] overflow-y-auto">
+                {!searchQuery.trim() && (
+                  <div className="p-3 bg-slate-50/70 border-b border-slate-100">
+                    <div className="flex items-center gap-1.5 text-[11px] font-black text-slate-600 uppercase tracking-wider mb-2">
+                      <TrendingUp className="w-3.5 h-3.5 text-flora-700" />
+                      <span>Popular in Borivali</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {popularTags.map((tag) => (
+                        <button
+                          key={tag}
+                          onClick={() => {
+                            setSearchQuery(tag);
+                            setIsSearchFocused(false);
+                            const el = document.getElementById('products-section');
+                            if (el) el.scrollIntoView({ behavior: 'smooth' });
+                          }}
+                          className="px-2.5 py-1 rounded-full bg-white text-slate-700 text-xs font-bold border border-slate-200 active:bg-flora-50"
+                        >
+                          🔍 {tag}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {searchQuery.trim() && (
+                  <>
+                    <div className="p-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                      <span>Matches ({searchSuggestions.length})</span>
+                      <span className="text-emerald-700 lowercase">100% genuine</span>
+                    </div>
+
+                    {searchSuggestions.length > 0 ? (
+                      <div className="divide-y divide-slate-100">
+                        {searchSuggestions.map((item) => {
+                          const qty = getItemQuantity(item.id);
+                          return (
+                            <div
+                              key={item.id}
+                              className="p-2.5 active:bg-emerald-50/40 flex items-center justify-between gap-2.5 transition"
+                            >
+                              <div 
+                                onClick={() => handleSelectProduct(item)}
+                                className="flex items-center gap-2.5 flex-1 cursor-pointer"
+                              >
+                                <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden shrink-0 p-1 flex items-center justify-center">
+                                  <ProductPackshot product={item} />
+                                </div>
+                                <div>
+                                  <p className="text-xs font-extrabold text-slate-900 leading-tight">
+                                    {item.name}
+                                  </p>
+                                  <p className="text-[10px] text-slate-500 font-medium">
+                                    {item.brandInfo} • {item.form}
+                                  </p>
+                                  <div className="flex items-center gap-1.5 mt-0.5">
+                                    <span className="text-xs font-black text-slate-900">₹{item.price}</span>
+                                    {item.mrp > item.price && (
+                                      <span className="text-[10px] text-slate-400 line-through">₹{item.mrp}</span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="shrink-0">
+                                {qty === 0 ? (
+                                  <button
+                                    onClick={() => addToCart(item, 1)}
+                                    className="px-3 py-1.5 rounded-xl text-xs font-black bg-emerald-50 active:bg-flora-700 text-flora-800 active:text-white border border-emerald-300"
+                                  >
+                                    + ADD
+                                  </button>
+                                ) : (
+                                  <div className="flex items-center bg-flora-700 text-white rounded-xl shadow-2xs overflow-hidden">
+                                    <button
+                                      onClick={() => updateCartQuantity(item.id, qty - 1)}
+                                      className="w-6 h-6 flex items-center justify-center active:bg-flora-800"
+                                    >
+                                      <Minus className="w-3 h-3" />
+                                    </button>
+                                    <span className="w-5 text-center text-xs font-black">{qty}</span>
+                                    <button
+                                      onClick={() => updateCartQuantity(item.id, qty + 1)}
+                                      className="w-6 h-6 flex items-center justify-center active:bg-flora-800"
+                                    >
+                                      <Plus className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="p-5 text-center text-slate-500 space-y-2">
+                        <p className="text-xs font-bold text-slate-700">No exact match for "{searchQuery}"</p>
+                        <a
+                          href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(
+                            `Hello Flora Pharmacy, is ${searchQuery} available in your Borivali store?`
+                          )}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-wa text-white text-xs font-bold"
+                        >
+                          Check on WhatsApp
+                        </a>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Locality Bottom Sheet Modal */}
+          {isLocationDropdownOpen && (
+            <div 
+              className="lg:hidden fixed inset-0 z-50 flex items-end justify-center bg-slate-950/60 backdrop-blur-xs p-0 animate-fade-in"
+              onClick={() => setIsLocationDropdownOpen(false)}
+            >
+              <div 
+                className="w-full bg-white rounded-t-3xl shadow-2xl border-t border-slate-200 p-5 space-y-3 animate-fade-in-up max-h-[80vh] flex flex-col"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-xl bg-emerald-50 text-flora-800 flex items-center justify-center">
+                      <MapPin className="w-4 h-4 text-emerald-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-heading font-black text-slate-900 text-sm">Select Delivery Locality</h4>
+                      <p className="text-[10px] text-slate-500">Dispatched from Samarpan store counter</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => setIsLocationDropdownOpen(false)} 
+                    className="p-1.5 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-800"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="overflow-y-auto space-y-1.5 custom-scrollbar flex-1 py-1">
+                  {localities.map((loc) => (
+                    <button
+                      key={loc.name}
+                      onClick={() => {
+                        setSelectedLocation(loc.name);
+                        setIsLocationDropdownOpen(false);
+                      }}
+                      className={`w-full text-left p-3 rounded-2xl text-xs transition flex items-center justify-between ${
+                        selectedLocation.includes(loc.name.split(",")[0])
+                          ? 'bg-flora-50 text-flora-900 font-black border border-emerald-300'
+                          : 'hover:bg-slate-50 text-slate-700 font-semibold border border-transparent'
+                      }`}
+                    >
+                      <div>
+                        <p className="leading-tight font-extrabold">{loc.name}</p>
+                        <p className="text-[10px] text-slate-400 font-normal">{loc.landmark}</p>
+                      </div>
+                      <span className="text-[10px] font-black text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-full shrink-0">
+                        {loc.time}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
 
         {/* 3. SUB-NAVIGATION RIBBON (Wellness Forever / Tata 1mg Style) */}
-        <div className="bg-slate-50/90 border-t border-slate-200/80 px-4 sm:px-6 lg:px-8 py-1.5 overflow-x-auto no-scrollbar">
+        <div className="bg-slate-50/90 border-t border-slate-200/80 px-3 sm:px-6 lg:px-8 py-1.5 overflow-x-auto no-scrollbar touch-pan-x" style={{ WebkitOverflowScrolling: 'touch' }}>
           <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 text-xs font-bold">
             
             {/* Category Quick Chips */}
