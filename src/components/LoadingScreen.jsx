@@ -234,24 +234,24 @@ export default function LoadingScreen({ onFinish }) {
                     opacity: [0.5, 0.85, 0.5]
                   }}
                   transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute inset-0 m-auto w-48 sm:w-56 h-48 sm:h-56 bg-gradient-to-tr from-amber-400/35 via-emerald-400/40 to-teal-300/30 rounded-full blur-2xl pointer-events-none"
+                  className="absolute inset-0 m-auto w-56 sm:w-64 h-56 sm:h-64 bg-gradient-to-tr from-amber-400/35 via-emerald-400/40 to-teal-300/30 rounded-full blur-2xl pointer-events-none"
                 />
 
-                {/* Golden Badge floating on top of Mascot */}
+                {/* Golden Badge cleanly above Mascot (zero face overlap) */}
                 <motion.div
                   initial={{ opacity: 0, y: -10, scale: 0.8 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ delay: 0.2, type: 'spring' }}
-                  className="absolute -top-3.5 z-20 px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-slate-950 text-[11px] font-black uppercase tracking-wider shadow-lg flex items-center gap-1.5 border border-amber-300"
+                  className="z-20 px-4 py-1 mb-2 rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-slate-950 text-[11px] sm:text-xs font-black uppercase tracking-wider shadow-lg flex items-center gap-1.5 border border-amber-300"
                 >
                   <Sparkles className="w-3.5 h-3.5 fill-current text-slate-950" />
                   <span>Namaskar! Welcome</span>
                 </motion.div>
 
-                {/* 3D Mascot Character with Traditional Namaste 🙏 Greeting */}
+                {/* 3D Mascot Character with Chest-Level Namaste 🙏 & 100% Clear Smiling Face */}
                 <motion.div
                   animate={{
-                    y: [0, -5, 0],
+                    y: [0, -6, 0],
                     rotate: [0, 1, 0, -1, 0]
                   }}
                   transition={{
@@ -259,20 +259,17 @@ export default function LoadingScreen({ onFinish }) {
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
-                  className="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-b from-white via-emerald-50/90 to-amber-50/80 p-2 border-3 border-amber-300/80 shadow-[0_15px_45px_rgba(0,0,0,0.45)] flex items-center justify-center overflow-hidden"
+                  className="relative w-44 h-48 sm:w-52 sm:h-56 rounded-3xl bg-gradient-to-b from-white via-emerald-50/80 to-amber-50/70 p-3 border-2 border-amber-300/80 shadow-[0_15px_45px_rgba(0,0,0,0.45)] flex items-center justify-center overflow-hidden"
                 >
                   <img
                     src="/images/flora-mascot-namaste.png"
                     alt="Flora Pharmacy Mascot Namaskar Greeting"
-                    className="w-full h-full object-contain filter drop-shadow-md transform hover:scale-105 transition-transform"
+                    className="max-h-full max-w-full object-contain filter drop-shadow-md select-none transform hover:scale-105 transition-transform"
                   />
-                  
-                  {/* Subtle Inner Lens Vignette */}
-                  <div className="absolute inset-0 rounded-full border border-white/60 pointer-events-none" />
                 </motion.div>
 
                 {/* Soft Pedestal Shadow */}
-                <div className="w-28 sm:w-36 h-2 bg-black/30 rounded-full blur-xs mt-1" />
+                <div className="w-32 sm:w-40 h-2 bg-black/30 rounded-full blur-xs mt-1.5" />
               </div>
 
               {/* Warm Indian Namaskar Speech Card */}
