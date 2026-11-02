@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
-import { BUSINESS_INFO } from '../data/business';
+import { BUSINESS_INFO, getUpiPaymentUrl } from '../data/business';
 import { 
   CheckCircle2, 
   X, 
@@ -13,16 +13,28 @@ import {
   ArrowRight,
   ShieldCheck,
   Printer,
-  FileText
+  FileText,
+  Copy,
+  Check,
+  Sparkles
 } from 'lucide-react';
 
 export default function OrderSuccessModal() {
   const { lastPlacedOrder, setLastPlacedOrder, setViewingInvoiceOrder } = useStore();
+  const [copiedUpi, setCopiedUpi] = useState(false);
 
   if (!lastPlacedOrder) return null;
 
   const handleClose = () => {
     setLastPlacedOrder(null);
+  };
+
+  const handleCopyUpi = () => {
+    if (navigator?.clipboard) {
+      navigator.clipboard.writeText(BUSINESS_INFO.upiId);
+      setCopiedUpi(true);
+      setTimeout(() => setCopiedUpi(false), 2000);
+    }
   };
 
   const itemsListText = lastPlacedOrder.items
@@ -125,20 +137,42 @@ export default function OrderSuccessModal() {
             <span className="text-flora-800 text-lg">₹{lastPlacedOrder.total}</span>
           </div>
 
-          {/* UPI Payment ID Info Box */}
+          {/* UPI Payment ID Info Box & Direct Google Pay Button */}
           {lastPlacedOrder.paymentMethod && lastPlacedOrder.paymentMethod.includes("UPI") && (
-            <div className="p-3.5 rounded-2xl bg-slate-900 text-white flex items-center justify-between border border-slate-800 shadow-sm">
-              <div className="space-y-0.5">
-                <span className="text-[10px] uppercase font-black text-emerald-400 block">
-                  Pay via UPI ID / GPay / PhonePe:
+            <div className="space-y-2.5">
+              <a
+                href={getUpiPaymentUrl(lastPlacedOrder.total, lastPlacedOrder.id)}
+                className="shimmer-button w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-flora-700 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-heading font-black text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-lg transition active:scale-95"
+              >
+                <span className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-xs font-black text-slate-900 shadow">
+                  G
                 </span>
-                <code className="text-emerald-300 font-mono font-bold text-xs select-all bg-slate-800 px-2 py-0.5 rounded">
-                  8879127052@ptypes
-                </code>
+                <span>⚡ Tap to Pay ₹{lastPlacedOrder.total} via Google Pay</span>
+              </a>
+
+              <div className="p-3.5 rounded-2xl bg-slate-900 text-white flex items-center justify-between border border-slate-800 shadow-sm">
+                <div className="space-y-1">
+                  <span className="text-[10px] uppercase font-black text-emerald-400 flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-emerald-400" />
+                    Store UPI ID ({BUSINESS_INFO.upiPayeeName}):
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <code className="text-emerald-300 font-mono font-bold text-xs select-all bg-slate-800 px-2 py-0.5 rounded border border-emerald-500/20">
+                      {BUSINESS_INFO.upiId}
+                    </code>
+                    <button
+                      onClick={handleCopyUpi}
+                      className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition"
+                      title="Copy UPI ID"
+                    >
+                      {copiedUpi ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    </button>
+                  </div>
+                </div>
+                <span className="text-xs font-black text-emerald-400 bg-emerald-950 px-2.5 py-1 rounded-lg border border-emerald-800 font-mono">
+                  ₹{lastPlacedOrder.total}
+                </span>
               </div>
-              <span className="text-xs font-black text-emerald-400 bg-emerald-950 px-2.5 py-1 rounded-lg border border-emerald-800">
-                ₹{lastPlacedOrder.total}
-              </span>
             </div>
           )}
 

@@ -62,3 +62,36 @@ export function getPrescriptionWhatsAppUrl() {
   const message = `Hello Flora Pharmacy, I have a doctor's prescription. I am sharing the photo here for medicine verification and home delivery.`;
   return `https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(message)}`;
 }
+
+/**
+ * Generates standard universal UPI Payment deep link (works seamlessly with Google Pay, PhonePe, Paytm, Cred, BHIM).
+ * Pre-fills store UPI ID (8879127052@ptypes), Flora Pharmacy payee name, exact product/order amount in INR, and order reference note.
+ */
+export function getUpiPaymentUrl(amount, orderId = "") {
+  const note = orderId ? `Flora Pharmacy #${orderId}` : `Flora Pharmacy Order`;
+  const cleanAmount = Number(amount || 0).toFixed(2);
+  const params = new URLSearchParams({
+    pa: BUSINESS_INFO.upiId,
+    pn: BUSINESS_INFO.upiPayeeName,
+    am: cleanAmount,
+    cu: "INR",
+    tn: note
+  });
+  return `upi://pay?${params.toString()}`;
+}
+
+/**
+ * Generates Google Pay (Tez) direct intent URL for Android devices.
+ */
+export function getGPayPaymentUrl(amount, orderId = "") {
+  const note = orderId ? `Flora Pharmacy #${orderId}` : `Flora Pharmacy Order`;
+  const cleanAmount = Number(amount || 0).toFixed(2);
+  const params = new URLSearchParams({
+    pa: BUSINESS_INFO.upiId,
+    pn: BUSINESS_INFO.upiPayeeName,
+    am: cleanAmount,
+    cu: "INR",
+    tn: note
+  });
+  return `tez://upi/pay?${params.toString()}`;
+}

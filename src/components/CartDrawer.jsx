@@ -250,14 +250,26 @@ export default function CartDrawer() {
                 </div>
               </div>
 
-              {/* Checkout Button */}
-              <button
-                onClick={handleProceedToCheckout}
-                className="shimmer-button w-full py-3.5 px-5 rounded-2xl bg-flora-700 hover:bg-flora-800 text-white font-heading font-black text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition active:scale-95"
-              >
-                <span>Proceed to Checkout (₹{cartGrandTotal})</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+              {/* Primary Quick Pay / Checkout Buttons */}
+              <div className="space-y-2">
+                <button
+                  onClick={handleProceedToCheckout}
+                  className="shimmer-button w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-emerald-600 via-flora-700 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-heading font-black text-sm flex items-center justify-center gap-2.5 shadow-md hover:shadow-lg transition active:scale-95 cursor-pointer"
+                >
+                  <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center text-[10px] font-black text-slate-900 shadow">
+                    G
+                  </span>
+                  <span>Pay ₹{cartGrandTotal} via Google Pay / UPI</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+
+                <button
+                  onClick={handleProceedToCheckout}
+                  className="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer"
+                >
+                  <span>Cash on Delivery / Other Options</span>
+                </button>
+              </div>
 
             </div>
           )}

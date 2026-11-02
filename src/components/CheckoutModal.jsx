@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
-import { BUSINESS_INFO } from '../data/business';
+import { BUSINESS_INFO, getUpiPaymentUrl } from '../data/business';
 import { 
   X, 
   MapPin, 
@@ -14,7 +14,11 @@ import {
   Truck, 
   ShieldCheck, 
   ArrowRight,
-  Clock
+  Clock,
+  Copy,
+  Check,
+  Sparkles,
+  Smartphone
 } from 'lucide-react';
 
 export default function CheckoutModal() {
@@ -30,14 +34,21 @@ export default function CheckoutModal() {
     selectedLocation
   } = useStore();
 
-  const [customerName, setCustomerName] = useState(currentUser ? currentUser.name : "");
-  const [customerPhone, setCustomerPhone] = useState(currentUser ? currentUser.phone : "");
+  const [customerName, setCustomerName] = useState(() => {
+    return currentUser?.name || localStorage.getItem('flora_guest_name') || "";
+  });
+  const [customerPhone, setCustomerPhone] = useState(() => {
+    return currentUser?.phone || localStorage.getItem('flora_guest_phone') || "";
+  });
   const [flatNumber, setFlatNumber] = useState("");
-  const [buildingName, setBuildingName] = useState(currentUser?.address || "");
+  const [buildingName, setBuildingName] = useState(() => {
+    return currentUser?.address || localStorage.getItem('flora_guest_address') || "";
+  });
   const [locality, setLocality] = useState(selectedLocation || "Samarpan, Borivali East");
-  const [paymentMethod, setPaymentMethod] = useState("COD"); // "COD", "UPI", "WhatsApp"
+  const [paymentMethod, setPaymentMethod] = useState("UPI"); // Default to Google Pay / UPI for instant payment
   const [deliverySlot, setDeliverySlot] = useState("Immediate (30-45 Mins)");
   const [notes, setNotes] = useState("");
+  const [copiedUpi, setCopiedUpi] = useState(false);
 
   React.useEffect(() => {
     if (currentUser) {
@@ -46,6 +57,14 @@ export default function CheckoutModal() {
       if (currentUser.address) setBuildingName(currentUser.address);
     }
   }, [currentUser]);
+
+  const handleCopyUpi = () => {
+    if (navigator?.clipboard) {
+      navigator.clipboard.writeText(BUSINESS_INFO.upiId);
+      setCopiedUpi(true);
+      setTimeout(() => setCopiedUpi(false), 2000);
+    }
+  };
 
   const quickLocalities = [
     "Samarpan Tower, Borivali East",
@@ -61,9 +80,16 @@ export default function CheckoutModal() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!customerName.trim() || !customerPhone.trim()) {
-      alert("Kripya apna naam aur phone number bharein!");
+      alert("Kripya apna naam aur 10-digit phone number bharein!");
       return;
     }
+
+    // Cache guest details in localStorage for faster re-orders
+    try {
+      localStorage.setItem('flora_guest_name', customerName.trim());
+      localStorage.setItem('flora_guest_phone', customerPhone.trim());
+      if (buildingName.trim()) localStorage.setItem('flora_guest_address', buildingName.trim());
+    } catch (e) {}
 
     const fullAddress = `${flatNumber ? flatNumber + ', ' : ''}${buildingName ? buildingName + ', ' : ''}${locality}`;
 
@@ -72,12 +98,25 @@ export default function CheckoutModal() {
       customerPhone: customerPhone.trim(),
       address: fullAddress,
       locality,
-      paymentMethod: paymentMethod === "COD" ? "Cash on Delivery" : paymentMethod === "UPI" ? "UPI QR Scan" : "WhatsApp Order",
+      paymentMethod: paymentMethod === "COD" ? "Cash on Delivery" : paymentMethod === "UPI" ? "Google Pay / UPI" : "WhatsApp Order",
       deliverySlot,
       notes: notes.trim()
     };
 
     const newOrder = placeOrder(orderData);
+
+    // DIRECT GOOGLE PAY / UPI REDIRECT:
+    // When paying via UPI / GPay, launch the UPI app directly with pre-filled amount and 8879127052@ptypes
+    if (paymentMethod === "UPI") {
+      const upiUrl = getUpiPaymentUrl(cartGrandTotal, newOrder.id);
+      setTimeout(() => {
+        try {
+          window.location.href = upiUrl;
+        } catch (err) {
+          console.warn("UPI intent launch error:", err);
+        }
+      }, 50);
+    }
 
     // If WhatsApp payment selected, open WhatsApp with order bill
     if (paymentMethod === "WhatsApp") {
@@ -248,15 +287,53 @@ export default function CheckoutModal() {
 
           {/* STEP 4: Payment Method Selection */}
           <div className="space-y-2.5">
-            <label className="text-xs font-black text-slate-900 uppercase tracking-wider block">
-              4. Payment Method
-            </label>
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-black text-slate-900 uppercase tracking-wider block">
+                4. Select Payment Method *
+              </label>
+              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                ⚡ Instant UPI Pre-filled
+              </span>
+            </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
               
-              {/* Cash on Delivery */}
-              <label className={`p-3 rounded-xl border cursor-pointer flex flex-col justify-between transition ${
-                paymentMethod === "COD" ? "border-flora-600 bg-flora-50 font-bold text-flora-900 ring-2 ring-flora-600/20" : "border-slate-200 text-slate-700"
+              {/* Option 1: Google Pay & UPI (PRIMARY RECOMMENDED) */}
+              <label className={`p-3 rounded-2xl border-2 cursor-pointer flex flex-col justify-between transition relative overflow-hidden ${
+                paymentMethod === "UPI" 
+                  ? "border-emerald-600 bg-emerald-50/60 font-bold text-emerald-950 ring-2 ring-emerald-500/30 shadow-xs" 
+                  : "border-slate-200 text-slate-700 hover:border-slate-300 bg-white"
+              }`}>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-black shadow-xs">
+                      G
+                    </span>
+                    <span className="text-[9px] font-black uppercase text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded">
+                      Fast Pay
+                    </span>
+                  </div>
+                  <input
+                    type="radio"
+                    name="payment"
+                    checked={paymentMethod === "UPI"}
+                    onChange={() => setPaymentMethod("UPI")}
+                    className="text-emerald-600 focus:ring-emerald-500"
+                  />
+                </div>
+                <div>
+                  <span className="font-black text-xs block text-slate-900">Google Pay / UPI</span>
+                  <span className="text-[10px] text-emerald-800 font-semibold mt-0.5 block">
+                    GPay, PhonePe, Paytm, BHIM
+                  </span>
+                </div>
+              </label>
+
+              {/* Option 2: Cash on Delivery */}
+              <label className={`p-3 rounded-2xl border cursor-pointer flex flex-col justify-between transition ${
+                paymentMethod === "COD" 
+                  ? "border-flora-600 bg-flora-50 font-bold text-flora-900 ring-2 ring-flora-600/20 shadow-xs" 
+                  : "border-slate-200 text-slate-700 hover:border-slate-300 bg-white"
               }`}>
                 <div className="flex items-center justify-between mb-2">
                   <Banknote className="w-5 h-5 text-emerald-700" />
@@ -265,32 +342,20 @@ export default function CheckoutModal() {
                     name="payment"
                     checked={paymentMethod === "COD"}
                     onChange={() => setPaymentMethod("COD")}
+                    className="text-flora-700"
                   />
                 </div>
-                <span className="font-bold">Cash on Delivery</span>
-                <span className="text-[10px] text-slate-500 mt-0.5">Pay cash at doorstep</span>
-              </label>
-
-              {/* UPI QR Code */}
-              <label className={`p-3 rounded-xl border cursor-pointer flex flex-col justify-between transition ${
-                paymentMethod === "UPI" ? "border-flora-600 bg-flora-50 font-bold text-flora-900 ring-2 ring-flora-600/20" : "border-slate-200 text-slate-700"
-              }`}>
-                <div className="flex items-center justify-between mb-2">
-                  <QrCode className="w-5 h-5 text-emerald-700" />
-                  <input
-                    type="radio"
-                    name="payment"
-                    checked={paymentMethod === "UPI"}
-                    onChange={() => setPaymentMethod("UPI")}
-                  />
+                <div>
+                  <span className="font-bold text-xs block text-slate-900">Cash on Delivery</span>
+                  <span className="text-[10px] text-slate-500 mt-0.5 block">Pay cash at doorstep</span>
                 </div>
-                <span className="font-bold">UPI QR Scan & Pay</span>
-                <span className="text-[10px] text-slate-500 mt-0.5">GPay, PhonePe, Paytm</span>
               </label>
 
-              {/* WhatsApp Order */}
-              <label className={`p-3 rounded-xl border cursor-pointer flex flex-col justify-between transition ${
-                paymentMethod === "WhatsApp" ? "border-flora-600 bg-flora-50 font-bold text-flora-900 ring-2 ring-flora-600/20" : "border-slate-200 text-slate-700"
+              {/* Option 3: WhatsApp Direct */}
+              <label className={`p-3 rounded-2xl border cursor-pointer flex flex-col justify-between transition ${
+                paymentMethod === "WhatsApp" 
+                  ? "border-flora-600 bg-flora-50 font-bold text-flora-900 ring-2 ring-flora-600/20 shadow-xs" 
+                  : "border-slate-200 text-slate-700 hover:border-slate-300 bg-white"
               }`}>
                 <div className="flex items-center justify-between mb-2">
                   <MessageCircle className="w-5 h-5 text-wa" />
@@ -299,41 +364,72 @@ export default function CheckoutModal() {
                     name="payment"
                     checked={paymentMethod === "WhatsApp"}
                     onChange={() => setPaymentMethod("WhatsApp")}
+                    className="text-wa"
                   />
                 </div>
-                <span className="font-bold">WhatsApp Direct</span>
-                <span className="text-[10px] text-slate-500 mt-0.5">Confirm via WhatsApp</span>
+                <div>
+                  <span className="font-bold text-xs block text-slate-900">WhatsApp Order</span>
+                  <span className="text-[10px] text-slate-500 mt-0.5 block">Confirm via WhatsApp chat</span>
+                </div>
               </label>
 
             </div>
 
-            {/* UPI QR Code Display if UPI is selected */}
+            {/* UPI / Google Pay Pre-filled Banner if UPI is selected */}
             {paymentMethod === "UPI" && (
-              <div className="p-4 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row items-center gap-4 border border-slate-800 shadow-md">
-                <div className="w-24 h-24 bg-white rounded-xl p-1.5 flex items-center justify-center shrink-0 shadow-md">
-                  {/* Generated Dynamic QR for 8879127052@ptypes */}
-                  <img
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(`upi://pay?pa=8879127052@ptypes&pn=Flora%20Pharmacy&am=${cartGrandTotal}&cu=INR`)}`}
-                    alt="Scan UPI QR Code to pay Flora Pharmacy"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-                <div className="space-y-1.5 text-xs text-center sm:text-left flex-grow">
-                  <div className="flex items-center justify-center sm:justify-start gap-2">
-                    <span className="text-[10px] uppercase font-black text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
-                      Direct UPI QR
-                    </span>
-                    <span className="text-[10px] text-slate-400 font-semibold">Flora Pharmacy Counter</span>
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 text-white space-y-3.5 border border-emerald-500/30 shadow-lg">
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  {/* QR Code */}
+                  <div className="w-22 h-22 sm:w-24 sm:h-24 bg-white rounded-xl p-1.5 flex items-center justify-center shrink-0 shadow-md">
+                    <img
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(getUpiPaymentUrl(cartGrandTotal))}`}
+                      alt="Scan UPI QR Code to pay Flora Pharmacy"
+                      className="w-full h-full object-contain"
+                    />
                   </div>
-                  <p className="font-extrabold text-base text-white">Amount: <span className="text-emerald-400">₹{cartGrandTotal}</span></p>
-                  <div className="flex items-center justify-center sm:justify-start gap-1.5">
-                    <span className="text-[11px] text-slate-300">UPI ID:</span>
-                    <code className="text-emerald-300 font-mono font-bold bg-slate-800 px-2 py-0.5 rounded select-all text-xs">
-                      8879127052@ptypes
-                    </code>
+
+                  <div className="space-y-1.5 text-xs text-center sm:text-left flex-grow">
+                    <div className="flex items-center justify-center sm:justify-start gap-2">
+                      <span className="text-[10px] uppercase font-black text-emerald-300 bg-emerald-900/60 px-2 py-0.5 rounded border border-emerald-700/60 flex items-center gap-1">
+                        <Sparkles className="w-3 h-3 text-emerald-400" />
+                        Pre-filled Amount
+                      </span>
+                      <span className="text-[10px] text-slate-300 font-semibold">Flora Pharmacy</span>
+                    </div>
+
+                    <p className="font-extrabold text-base text-white">
+                      Payable Amount: <span className="text-emerald-400 font-mono text-lg">₹{cartGrandTotal}</span>
+                    </p>
+
+                    <div className="flex items-center justify-center sm:justify-start gap-2 pt-0.5">
+                      <span className="text-[11px] text-slate-300">Store UPI ID:</span>
+                      <code className="text-emerald-300 font-mono font-bold bg-slate-800/90 px-2 py-0.5 rounded text-xs border border-emerald-500/20 select-all">
+                        {BUSINESS_INFO.upiId}
+                      </code>
+                      <button
+                        type="button"
+                        onClick={handleCopyUpi}
+                        className="p-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition"
+                        title="Copy UPI ID"
+                      >
+                        {copiedUpi ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+
+                    <p className="text-[10.5px] text-slate-300">
+                      Neeche button dabate hi aapka Google Pay ya UPI app open ho jayega with ₹{cartGrandTotal} pre-filled.
+                    </p>
                   </div>
-                  <p className="text-[10px] text-slate-400">Scan via GPay, PhonePe, Paytm or any UPI app to pay instantly.</p>
                 </div>
+
+                {/* Instant Tap to Open Google Pay for Mobile Devices */}
+                <a
+                  href={getUpiPaymentUrl(cartGrandTotal)}
+                  className="w-full py-2.5 px-3 rounded-xl bg-white hover:bg-slate-100 text-slate-950 font-heading font-black text-xs flex items-center justify-center gap-2 shadow transition active:scale-95"
+                >
+                  <span className="w-4 h-4 rounded-full bg-slate-900 text-white flex items-center justify-center text-[9px] font-black">G</span>
+                  <span>⚡ Tap to Open Google Pay Now (₹{cartGrandTotal})</span>
+                </a>
               </div>
             )}
           </div>
@@ -371,15 +467,37 @@ export default function CheckoutModal() {
             </div>
           </div>
 
-          {/* Submit Place Order Button */}
-          <button
-            type="submit"
-            className="shimmer-button w-full py-4 px-6 rounded-2xl bg-flora-700 hover:bg-flora-800 text-white font-heading font-black text-base flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition active:scale-95"
-          >
-            <CheckCircle2 className="w-5 h-5" />
-            <span>Place Order Now (₹{cartGrandTotal})</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          {/* Submit Place Order / Pay Button */}
+          {paymentMethod === "UPI" ? (
+            <button
+              type="submit"
+              className="shimmer-button w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-flora-700 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-heading font-black text-base flex items-center justify-center gap-2.5 shadow-lg hover:shadow-xl transition active:scale-95 cursor-pointer"
+            >
+              <span className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-xs font-black text-slate-900 shadow">
+                G
+              </span>
+              <span>Pay ₹{cartGrandTotal} via Google Pay / UPI</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          ) : paymentMethod === "COD" ? (
+            <button
+              type="submit"
+              className="shimmer-button w-full py-4 px-6 rounded-2xl bg-slate-900 hover:bg-black text-white font-heading font-black text-base flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition active:scale-95 cursor-pointer"
+            >
+              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+              <span>Confirm Cash on Delivery (₹{cartGrandTotal})</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="shimmer-button w-full py-4 px-6 rounded-2xl bg-wa hover:bg-wa-dark text-slate-950 hover:text-white font-heading font-black text-base flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition active:scale-95 cursor-pointer"
+            >
+              <MessageCircle className="w-5 h-5 fill-current" />
+              <span>Place Order via WhatsApp (₹{cartGrandTotal})</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          )}
 
         </form>
 
