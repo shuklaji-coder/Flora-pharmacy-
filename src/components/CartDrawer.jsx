@@ -79,28 +79,16 @@ export default function CartDrawer() {
             </button>
           </div>
 
-          {/* Free Express Delivery Progress Bar */}
+          {/* 100% Free Express Delivery Banner */}
           {cartCount > 0 && (
-            <div className="bg-emerald-50/80 p-3.5 border-b border-emerald-100 space-y-1.5">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-emerald-950 flex items-center gap-1.5">
-                  <Truck className="w-4 h-4 text-emerald-700" />
-                  {amountNeededForFreeDelivery === 0 ? (
-                    <span className="text-emerald-700">🎉 FREE 30-Min Delivery Unlocked!</span>
-                  ) : (
-                    <span>Add ₹{amountNeededForFreeDelivery} more for FREE Delivery</span>
-                  )}
-                </span>
-                <span className="text-[11px] font-extrabold text-emerald-800">
-                  {Math.round(deliveryProgress)}%
-                </span>
-              </div>
-              <div className="w-full h-1.5 rounded-full bg-emerald-200 overflow-hidden">
-                <div 
-                  className="h-full bg-flora-600 transition-all duration-300 rounded-full"
-                  style={{ width: `${deliveryProgress}%` }}
-                />
-              </div>
+            <div className="bg-emerald-50/90 p-3 border-b border-emerald-100 flex items-center justify-between text-xs">
+              <span className="font-bold text-emerald-950 flex items-center gap-1.5">
+                <Truck className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>🎉 100% FREE Express Home Delivery!</span>
+              </span>
+              <span className="text-[10.5px] font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
+                ₹0 Charge
+              </span>
             </div>
           )}
 
@@ -235,13 +223,11 @@ export default function CartDrawer() {
                   </div>
                 )}
 
-                <div className="flex justify-between">
-                  <span>Delivery Charges (Borivali)</span>
-                  {deliveryFee === 0 ? (
-                    <span className="font-bold text-emerald-700">FREE</span>
-                  ) : (
-                    <span className="font-semibold text-slate-800">₹{deliveryFee}</span>
-                  )}
+                <div className="flex justify-between items-center">
+                  <span>Delivery Charges (Borivali East)</span>
+                  <span className="font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                    FREE (₹0)
+                  </span>
                 </div>
 
                 <div className="pt-2 border-t border-slate-100 flex justify-between text-sm sm:text-base font-black text-slate-900">

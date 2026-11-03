@@ -457,9 +457,11 @@ export default function CheckoutModal() {
                 <span>₹{cartDiscount}</span>
               </div>
             )}
-            <div className="flex justify-between font-medium">
+            <div className="flex justify-between items-center font-medium">
               <span>Delivery Charges:</span>
-              <span className="font-bold text-emerald-700">{deliveryFee === 0 ? "FREE" : `₹${deliveryFee}`}</span>
+              <span className="font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                FREE (₹0)
+              </span>
             </div>
             <div className="pt-2 border-t border-slate-200 flex justify-between text-base font-black text-slate-900">
               <span>Payable Amount:</span>

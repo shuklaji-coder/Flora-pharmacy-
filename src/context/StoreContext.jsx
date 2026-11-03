@@ -664,10 +664,10 @@ export function StoreProvider({ children }) {
   const cartSubtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const cartMrpTotal = cart.reduce((sum, item) => sum + (item.mrp || item.price) * item.quantity, 0);
   const cartDiscount = Math.max(0, cartMrpTotal - cartSubtotal);
-  // Free delivery above Rs 299 in Borivali East
-  const freeDeliveryThreshold = 299;
-  const deliveryFee = cartSubtotal >= freeDeliveryThreshold || cartSubtotal === 0 ? 0 : 30;
-  const cartGrandTotal = cartSubtotal + deliveryFee;
+  // 100% Free Express Delivery on ALL Orders across Borivali & Samarpan
+  const freeDeliveryThreshold = 0;
+  const deliveryFee = 0;
+  const cartGrandTotal = cartSubtotal;
 
   // ORDER OPERATIONS
   const placeOrder = (orderData) => {

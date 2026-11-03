@@ -149,7 +149,7 @@ export default function Navbar() {
               ⚡ 30-Min Express
             </span>
             <span className="hidden sm:inline text-slate-300 font-medium">
-              Free medicine delivery in Samarpan & Borivali East on orders above ₹299
+              100% Free medicine home delivery on all orders across Samarpan & Borivali East
             </span>
           </div>
 
