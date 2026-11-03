@@ -375,50 +375,23 @@ export default function CustomerAuthModal() {
                 </div>
               </div>
 
-              {/* TAB SWITCHER: LOGIN vs SIGN UP (EMERALD & CHAMPAGNE) */}
-              <div className="bg-[#EFE5D8] p-1.5 rounded-2xl flex items-center border border-[#DFC09E]/70 shadow-inner">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAuthMode('login');
-                    setErrorMsg("");
-                    if (setGoogleAuthError) setGoogleAuthError("");
-                  }}
-                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-heading font-black flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                    authMode === 'login'
-                      ? 'bg-gradient-to-r from-[#045238] to-[#066144] text-[#FAF5EC] shadow-md shadow-emerald-950/20 border border-[#047857]'
-                      : 'text-[#6D5533] hover:text-[#043E2B] hover:bg-[#FAF5EC]/70'
-                  }`}
-                >
-                  <LogIn className={`w-3.5 h-3.5 ${authMode === 'login' ? 'text-[#EED9C4]' : 'text-[#065F46]'}`} />
-                  <span>Sign In</span>
-                </button>
+              {/* 1-CLICK GOOGLE SIGN-IN BOX */}
+              <div className="p-4 rounded-2xl bg-white/95 border-2 border-[#DFC09E] shadow-sm space-y-3">
+                <div className="text-center space-y-0.5">
+                  <span className="text-[11px] font-black text-[#059669] uppercase tracking-wider block">
+                    ⚡ 1-Click Instant Access
+                  </span>
+                  <p className="text-[11.5px] text-[#8C7558] font-medium">
+                    No password to remember • Instant order history
+                  </p>
+                </div>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAuthMode('signup');
-                    setErrorMsg("");
-                    if (setGoogleAuthError) setGoogleAuthError("");
-                  }}
-                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-heading font-black flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                    authMode === 'signup'
-                      ? 'bg-gradient-to-r from-[#045238] to-[#066144] text-[#FAF5EC] shadow-md shadow-emerald-950/20 border border-[#047857]'
-                      : 'text-[#6D5533] hover:text-[#043E2B] hover:bg-[#FAF5EC]/70'
-                  }`}
-                >
-                  <UserPlus className={`w-3.5 h-3.5 ${authMode === 'signup' ? 'text-[#EED9C4]' : 'text-[#065F46]'}`} />
-                  <span>Create Account</span>
-                </button>
-              </div>
-
-              {/* GOOGLE 1-CLICK OAUTH BUTTON */}
-              <div className="space-y-1.5">
+                {/* Google 1-Click Button */}
                 <button
                   type="button"
                   disabled={isGoogleAuthLoading}
                   onClick={loginWithGoogle}
-                  className="w-full py-3 px-4 rounded-2xl bg-[#FFFDF9] hover:bg-[#FAF4EA] text-[#043E2B] font-heading font-black text-xs sm:text-sm border-2 border-[#DFC09E] hover:border-[#C5A059] shadow-sm flex items-center justify-center gap-2.5 transition-all active:scale-98 disabled:opacity-60 cursor-pointer"
+                  className="w-full py-3.5 px-4 rounded-xl bg-[#FFFDF9] hover:bg-[#FAF4EA] text-[#043E2B] font-heading font-black text-xs sm:text-sm border-2 border-[#DFC09E] hover:border-[#059669] shadow-sm hover:shadow-md flex items-center justify-center gap-3 transition-all active:scale-98 disabled:opacity-60 cursor-pointer"
                 >
                   {isGoogleAuthLoading ? (
                     <div className="w-4 h-4 border-2 border-[#DFC09E] border-t-[#065F46] rounded-full animate-spin" />
@@ -426,11 +399,7 @@ export default function CustomerAuthModal() {
                     <GoogleIcon />
                   )}
                   <span>
-                    {isGoogleAuthLoading 
-                      ? "Connecting..." 
-                      : authMode === 'login' 
-                        ? "Continue with Google (1-Click)" 
-                        : "Sign Up with Google (Instant)"}
+                    {isGoogleAuthLoading ? "Signing In with Google..." : "Continue with Google"}
                   </span>
                 </button>
 
@@ -440,114 +409,19 @@ export default function CustomerAuthModal() {
                     <p className="leading-tight">{googleAuthError || errorMsg}</p>
                   </div>
                 )}
+
+                <div className="flex items-center justify-center gap-1.5 pt-1 text-[10.5px] text-[#8C7558]">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#059669]" />
+                  <span>Google Verified • 256-Bit SSL Encrypted</span>
+                </div>
               </div>
 
-              {/* DIVIDER */}
-              <div className="relative flex items-center justify-center">
-                <div className="border-t border-[#DFC09E]/60 w-full" />
-                <span className="bg-[#FAF5EC] px-2.5 text-[10px] font-black text-[#8C7558] uppercase tracking-wider relative shrink-0">
-                  {authMode === 'login' ? "Or with Mobile" : "Or Register with Mobile"}
-                </span>
-              </div>
-
-              {/* Form */}
-              <form onSubmit={handleFormSubmit} className="space-y-3">
-                
-                <div className="space-y-1">
-                  <label className="text-xs font-bold text-[#043E2B] block">
-                    Full Name *
-                  </label>
-                  <div className="relative">
-                    <User className="w-4 h-4 text-[#065F46] absolute left-3 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="text"
-                      required
-                      value={name}
-                      onChange={(e) => {
-                        setName(e.target.value);
-                        if (errorMsg) setErrorMsg("");
-                      }}
-                      placeholder="e.g. Ramesh Shah"
-                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border-2 border-[#E5D7C6] focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 bg-white/95 text-[#043E2B] placeholder:text-[#9C8A74] font-medium transition"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-xs font-bold text-[#043E2B] block">
-                    Mobile Number *
-                  </label>
-                  <div className="relative flex items-center">
-                    <div className="absolute left-3 flex items-center gap-1 text-xs font-black text-[#065F46] pointer-events-none">
-                      <Phone className="w-3.5 h-3.5 text-[#065F46]" />
-                      <span>+91</span>
-                    </div>
-                    <input
-                      type="tel"
-                      required
-                      maxLength={10}
-                      value={phone}
-                      onChange={(e) => {
-                        setPhone(e.target.value);
-                        if (errorMsg) setErrorMsg("");
-                      }}
-                      placeholder="98200XXXXX"
-                      className="w-full pl-16 pr-3 py-2 text-xs rounded-xl border-2 border-[#E5D7C6] focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 bg-white/95 text-[#043E2B] placeholder:text-[#9C8A74] font-medium tracking-wide transition"
-                    />
-                  </div>
-                </div>
-
-                {authMode === 'signup' && (
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-[#043E2B] block">
-                      Borivali Locality
-                    </label>
-                    <div className="relative">
-                      <MapPin className="w-4 h-4 text-[#065F46] absolute left-3 top-1/2 -translate-y-1/2" />
-                      <select
-                        value={locality}
-                        onChange={(e) => setLocality(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border-2 border-[#E5D7C6] focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 bg-white/95 text-[#043E2B] font-medium appearance-none transition"
-                      >
-                        {borivaliLocalities.map((loc) => (
-                          <option key={loc} value={loc}>{loc}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                )}
-
-                <div className="space-y-1">
-                  <label className="text-xs font-bold text-[#043E2B] block">
-                    Delivery Address (Optional)
-                  </label>
-                  <div className="relative">
-                    <MapPin className="w-4 h-4 text-[#065F46] absolute left-3 top-2.5" />
-                    <textarea
-                      rows={2}
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      placeholder="Flat no, building name, Borivali East landmark"
-                      className="w-full pl-9 pr-3 py-1.5 text-xs rounded-xl border-2 border-[#E5D7C6] focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 bg-white/95 text-[#043E2B] placeholder:text-[#9C8A74] font-medium transition"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="shimmer-button w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#045238] via-[#065F46] to-[#0B6E4A] hover:from-[#033F2B] hover:to-[#05573C] text-[#FFFDF9] font-heading font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/25 border border-[#DFC09E]/50 transition cursor-pointer"
-                >
-                  <span>
-                    {authMode === 'login' ? "Sign In with Mobile" : "Create Account & Enter Store 🔑"}
-                  </span>
-                  <ArrowRight className="w-4 h-4 text-[#EED9C4]" />
-                </button>
-
-                <p className="text-[10px] text-center text-[#8C7558] font-medium">
-                  🔒 Your details are stored safely for fast re-ordering in Borivali East.
+              <div className="p-3 rounded-xl bg-white/70 border border-[#DFC09E]/60 text-center text-xs text-[#6D5533] space-y-1">
+                <span className="font-extrabold text-[#043E2B] block">Why sign in with Google?</span>
+                <p className="text-[11px] text-[#8C7558] leading-tight">
+                  Automatically keeps your doctor prescriptions and past medicine bills synced safely across your phone and laptop.
                 </p>
-
-              </form>
+              </div>
             </div>
           )}
 
