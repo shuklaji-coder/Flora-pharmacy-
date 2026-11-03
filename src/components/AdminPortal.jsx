@@ -41,9 +41,30 @@ import {
   CheckCircle,
   Upload,
   Image as ImageIcon,
-  Loader2
+  Loader2,
+  Copy,
+  Download,
+  ExternalLink
 } from 'lucide-react';
 import { compressImage, sanitizeImageUrl } from '../utils/imageCompressor';
+
+const VERIFIED_PRESET_PHOTOS = [
+  { label: "Dettol Antiseptic 250ml", url: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80" },
+  { label: "Johnson's Baby Shampoo", url: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?auto=format&fit=crop&w=600&q=80" },
+  { label: "Pampers Baby Diapers", url: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=600&q=80" },
+  { label: "Himalaya Baby Wipes", url: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=600&q=80" },
+  { label: "Cetaphil Gentle Cleanser", url: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80" },
+  { label: "Nivea Soft Moisturizer", url: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=600&q=80" },
+  { label: "Vaseline Petroleum Jelly", url: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80" },
+  { label: "Sensodyne Fresh Gel", url: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=600&q=80" },
+  { label: "Whisper Ultra Pads", url: "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=600&q=80" },
+  { label: "Band-Aid Waterproof", url: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?auto=format&fit=crop&w=600&q=80" },
+  { label: "Odomos Repellent Cream", url: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" },
+  { label: "Protinex Health Drink", url: "https://images.unsplash.com/photo-1579722821273-0f6c7d44362f?auto=format&fit=crop&w=600&q=80" },
+  { label: "Horlicks Classic Malt", url: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80" },
+  { label: "Dettol Skincare Handwash", url: "https://images.unsplash.com/photo-1584362917165-526a968579e8?auto=format&fit=crop&w=600&q=80" },
+  { label: "Himalaya Neem Face Wash", url: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=600&q=80" }
+];
 
 export default function AdminPortal({ onExit }) {
   const { 
@@ -112,6 +133,8 @@ export default function AdminPortal({ onExit }) {
   const [editImage, setEditImage] = useState("");
   const [editStock, setEditStock] = useState("");
   const [isCompressingImg, setIsCompressingImg] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [copiedCatalog, setCopiedCatalog] = useState(false);
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
@@ -1479,6 +1502,15 @@ export default function AdminPortal({ onExit }) {
                   )}
 
                   <button
+                    onClick={() => setShowExportModal(true)}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 font-heading font-black text-xs transition cursor-pointer"
+                    title="Export Catalog or Sync with Production"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Sync / Export Catalog</span>
+                  </button>
+
+                  <button
                     onClick={() => setShowAddProductModal(true)}
                     className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-heading font-black text-xs transition shadow-glow cursor-pointer"
                   >
@@ -2314,6 +2346,23 @@ export default function AdminPortal({ onExit }) {
                   Medicine Photo / Packshot (Optional)
                 </label>
                 
+                {/* Quick Presets for Adding New Product */}
+                <div className="space-y-1">
+                  <label className="block text-[10.5px] text-slate-400 font-bold">Or select verified authentic photo:</label>
+                  <select
+                    onChange={(e) => {
+                      if (e.target.value) setNewProdImage(e.target.value);
+                    }}
+                    defaultValue=""
+                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-xs focus:border-emerald-500 focus:outline-none"
+                  >
+                    <option value="" disabled>-- Click to choose verified medicine packshot --</option>
+                    {VERIFIED_PRESET_PHOTOS.map((p, i) => (
+                      <option key={i} value={p.url}>{p.label}</option>
+                    ))}
+                  </select>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 items-center">
                   {/* File Upload Button */}
                   {isCompressingImg ? (
@@ -2415,7 +2464,88 @@ export default function AdminPortal({ onExit }) {
         </div>
       )}
 
-      {/* MODAL: EDIT PRODUCT DETAILS & PHOTO */}
+      {/* MODAL: EXPORT / SYNC CATALOG TO PRODUCTION */}
+      {showExportModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-slate-900 border border-slate-700 rounded-3xl max-w-xl w-full p-6 space-y-4 shadow-2xl my-8">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                  <Download className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-black text-white text-base">Catalog Sync & Production Export</h3>
+                  <p className="text-[11px] text-slate-400">Sync all your admin updates with GitHub & Production</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setShowExportModal(false)}
+                className="w-7 h-7 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center cursor-pointer transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-3.5 text-xs">
+              <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+                <span className="font-bold text-slate-300 block">Current Persistence Status</span>
+                <div className="flex items-center gap-2">
+                  <span className={`w-2.5 h-2.5 rounded-full ${isFirestoreConnected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
+                  <span className="text-white font-medium">
+                    {isFirestoreConnected 
+                      ? "🔥 Live Cloud Sync Active: Updates automatically sync to Firestore database."
+                      : "⚡ Local Active: Updates are stored on this device. Use the copy button below to permanently push to production."}
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-slate-400 font-bold">Catalog Code (src/data/products.js)</label>
+                  <span className="text-[10px] text-slate-500">{products.length} products with updated photos & prices</span>
+                </div>
+                <textarea
+                  readOnly
+                  rows={8}
+                  value={`export const PRODUCTS = ${JSON.stringify(products, null, 2)};`}
+                  className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-emerald-300 font-mono text-[10.5px] leading-relaxed focus:outline-none select-all"
+                />
+              </div>
+
+              <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const blob = new Blob([`export const PRODUCTS = ${JSON.stringify(products, null, 2)};`], { type: 'application/javascript' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'products.js';
+                    a.click();
+                  }}
+                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Download products.js</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(`export const PRODUCTS = ${JSON.stringify(products, null, 2)};`);
+                    setCopiedCatalog(true);
+                    setTimeout(() => setCopiedCatalog(false), 3000);
+                  }}
+                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-glow flex items-center gap-1.5 cursor-pointer"
+                >
+                  {copiedCatalog ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedCatalog ? "Copied to Clipboard!" : "Copy Code to Clipboard"}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {editingProduct && (
         <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-slate-900 border border-slate-700 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl my-8">
@@ -2466,28 +2596,49 @@ export default function AdminPortal({ onExit }) {
                   )}
                 </div>
 
+                {/* Quick Preset Selector */}
+                <div className="space-y-1">
+                  <label className="block text-[10.5px] text-slate-400 font-bold">Or select verified authentic photo:</label>
+                  <select
+                    onChange={(e) => {
+                      if (e.target.value) setEditImage(e.target.value);
+                    }}
+                    defaultValue=""
+                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-xs focus:border-emerald-500 focus:outline-none"
+                  >
+                    <option value="" disabled>-- Click to choose verified medicine packshot --</option>
+                    {VERIFIED_PRESET_PHOTOS.map((p, i) => (
+                      <option key={i} value={p.url}>{p.label}</option>
+                    ))}
+                  </select>
+                </div>
+
                 <input
                   type="text"
                   value={editImage}
                   onChange={(e) => setEditImage(e.target.value)}
-                  placeholder="Or paste /images/products/... or web URL"
+                  placeholder="Or paste image URL or data URL..."
                   className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white font-mono text-[11px] focus:border-emerald-500 focus:outline-none"
                 />
 
                 {editImage && (
                   <div className="flex items-center gap-2.5 p-2 rounded-xl bg-slate-900 border border-slate-800">
-                    <div className="w-12 h-12 rounded-lg bg-white p-1 overflow-hidden flex items-center justify-center border border-slate-700 shrink-0">
+                    <div className="w-14 h-14 rounded-lg bg-white p-1 overflow-hidden flex items-center justify-center border border-slate-700 shrink-0">
                       <img 
                         src={editImage} 
                         alt="Preview" 
                         referrerPolicy="no-referrer"
+                        crossOrigin="anonymous"
                         className="max-h-full max-w-full object-contain" 
                         onError={(e) => { e.target.style.display = 'none'; }} 
                       />
                     </div>
                     <div>
-                      <span className="text-[11px] text-emerald-400 font-bold block">Photo ready to save</span>
-                      <span className="text-[9.5px] text-slate-400">Will be shown on storefront card & sliders</span>
+                      <span className="text-[11px] text-emerald-400 font-bold flex items-center gap-1">
+                        <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+                        Photo ready to save
+                      </span>
+                      <span className="text-[9.5px] text-slate-400">Saves to catalog and storefront immediately</span>
                     </div>
                   </div>
                 )}

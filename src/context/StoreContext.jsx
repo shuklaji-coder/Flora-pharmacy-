@@ -74,21 +74,38 @@ function enrichProduct(item, index) {
 }
 
 export function StoreProvider({ children }) {
-  // 1. PRODUCTS STATE (persisted in localStorage or initialized from catalog)
+  // 1. PRODUCTS STATE (persisted in localStorage with smart cloud merge)
   const [products, setProducts] = useState(() => {
     try {
       const savedVersion = localStorage.getItem('flora_catalog_version');
-      if (savedVersion === 'fmcg_15_v2') {
+      const savedCustom = localStorage.getItem('flora_custom_products');
+      let customMap = {};
+      if (savedCustom) {
+        try {
+          customMap = JSON.parse(savedCustom);
+        } catch (e) {}
+      }
+
+      // If version is current flora_v3_master, restore cached products
+      if (savedVersion === 'flora_v3_master') {
         const saved = localStorage.getItem('flora_products');
         if (saved) {
           const parsed = JSON.parse(saved);
           if (Array.isArray(parsed) && parsed.length > 0) return parsed;
         }
       }
-      // Initialize with user's selected 15 essential personal care products
-      localStorage.setItem('flora_catalog_version', 'fmcg_15_v2');
-      localStorage.setItem('flora_products', JSON.stringify(initialCatalog));
-      return initialCatalog;
+
+      // Merge initial catalog with any custom modifications made in admin panel
+      const merged = initialCatalog.map((prod) => {
+        if (customMap[prod.id]) {
+          return { ...prod, ...customMap[prod.id] };
+        }
+        return prod;
+      });
+
+      localStorage.setItem('flora_catalog_version', 'flora_v3_master');
+      localStorage.setItem('flora_products', JSON.stringify(merged));
+      return merged;
     } catch (e) {
       console.warn("Error reading flora_products from localStorage", e);
     }
@@ -737,6 +754,10 @@ export function StoreProvider({ children }) {
       const next = [newProduct, ...prev];
       try {
         localStorage.setItem('flora_products', JSON.stringify(next));
+        const currentCustomStr = localStorage.getItem('flora_custom_products');
+        const customMap = currentCustomStr ? JSON.parse(currentCustomStr) : {};
+        customMap[newProduct.id] = newProduct;
+        localStorage.setItem('flora_custom_products', JSON.stringify(customMap));
       } catch (e) {
         console.warn("Storage warning saving new product:", e);
       }
@@ -768,6 +789,12 @@ export function StoreProvider({ children }) {
       // Immediately persist to localStorage
       try {
         localStorage.setItem('flora_products', JSON.stringify(next));
+        
+        // Also persist to custom products registry
+        const currentCustomStr = localStorage.getItem('flora_custom_products');
+        const customMap = currentCustomStr ? JSON.parse(currentCustomStr) : {};
+        customMap[productId] = { ...(customMap[productId] || {}), ...updatedFields };
+        localStorage.setItem('flora_custom_products', JSON.stringify(customMap));
       } catch (err) {
         console.warn("Storage warning saving updated product:", err);
       }
@@ -777,12 +804,11 @@ export function StoreProvider({ children }) {
     // Update / Upsert in Firestore Database with merge: true
     try {
       if (db) {
-        // Find existing or updated fields
         const payload = mergedProduct || updatedFields;
         await setDoc(doc(db, "products", productId), payload, { merge: true });
       }
     } catch (e) {
-      console.warn("Firestore update product notice:", e);
+      console.warn("Firestore update product notice (check Firebase rules):", e);
     }
   };
 
@@ -791,6 +817,12 @@ export function StoreProvider({ children }) {
       const next = prev.filter((prod) => prod.id !== productId);
       try {
         localStorage.setItem('flora_products', JSON.stringify(next));
+        const currentCustomStr = localStorage.getItem('flora_custom_products');
+        if (currentCustomStr) {
+          const customMap = JSON.parse(currentCustomStr);
+          delete customMap[productId];
+          localStorage.setItem('flora_custom_products', JSON.stringify(customMap));
+        }
       } catch (e) {}
       return next;
     });
@@ -809,7 +841,8 @@ export function StoreProvider({ children }) {
     setProducts([]);
     try {
       localStorage.setItem('flora_products', JSON.stringify([]));
-      localStorage.setItem('flora_catalog_version', 'fmcg_15_v2');
+      localStorage.setItem('flora_custom_products', JSON.stringify({}));
+      localStorage.setItem('flora_catalog_version', 'flora_v3_master');
       if (db) {
         const snapshot = await getDocs(collection(db, "products"));
         snapshot.forEach((d) => deleteDoc(d.ref));
